@@ -1,13 +1,13 @@
 #!/usr/bin/bash
 
 #################
-# load-staging-database-with-live.sh
+# restore-database-dev.sh
 #
 #
-# Overwrites the Staging Database with the Live Database 
+# Restores dev database from backup
 #
 #  Usage:
-# ./load-staging-database-with-live.sh
+# ./restore-database-dev.sh
 #
 #
 # @author <andrew@nomstock.com>
@@ -36,6 +36,9 @@ source "${DIR%%/}/config-bash-advanced.conf";
 DEST_DATABASE_IS_REMOTE="${DEV_DATABASE_IS_REMOTE}";
 
 DEST_DEFAULTS_FILE="${DEV_MYSQL_DEFAULTS_FILE}";#name of mysql --defaults-file containing username and passwords (in the same directory as this file)
+
+DEST_DB_HOST="${DEV_DB_HOST}";
+
 SOURCE_BACKUP_FILE="${DEV_BACKUP_FILE}"; #absolute file path to where we stash the source db and where we restore it from
 
 DEST_DB_NAME="${DEV_DB_NAME}";

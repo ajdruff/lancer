@@ -1,13 +1,10 @@
 #!/usr/bin/bash
 
 #################
-# load-staging-database-with-live.sh
 #
 #
-# Overwrites the Staging Database with the Live Database 
+# Overwrites the Dev database with the live database
 #
-#  Usage:
-# ./load-staging-database-with-live.sh
 #
 #
 # @author <andrew@nomstock.com>

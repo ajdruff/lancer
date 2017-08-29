@@ -1,13 +1,13 @@
 #!/usr/bin/bash
 
 #################
-# backup-files-live.sh
+# backup-files-dev.sh
 #
 #
-# Backs up the Live files
+# Backs up the Dev files
 #
 #  Usage:
-# ./backup-files-live.sh
+# ./backup-files-dev.sh
 #
 #
 # @author <andrew@nomstock.com>
@@ -33,16 +33,15 @@ source "${DIR%%/}/config-bash-advanced.conf";
 
 
 #config
-SOURCE_DIRECTORY_IS_REMOTE="${LIVE_DIRECTORY_IS_REMOTE}";
-SOURCE_DOMAIN="${DOMAIN}";
-SOURCE_DIRECTORY_PATH=${LIVE_DIR_PATH}/${HTML_DIRNAME};
-SOURCE_ENVIRONMENT=LIVE;
+SOURCE_DIRECTORY_IS_REMOTE="${DEV_DIRECTORY_IS_REMOTE}";
+SOURCE_DOMAIN="${DOMAIN_DEV}";
+SOURCE_DIRECTORY_PATH=${DEV_DIR_PATH};
+SOURCE_ENVIRONMENT=DEV;
 
 #config 
 DRY_RUN=false; ## set to true to add --dry-run
 
 COMPRESSION=zip; ## tar/zip/none
-
 
 
 source "${DIR%%/}/backup-files.inc.sh";

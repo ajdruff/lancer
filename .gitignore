@@ -5,3 +5,7 @@
 *.log
 *.gz
 *.tar
+/nbproject/private/
+/admin/test
+/admin/old-slide-rule-scripts
+/nbproject

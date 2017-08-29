@@ -2,14 +2,13 @@
 
 
 #################
-# backup-all-live.sh
+# backup-all-dev.sh
 #
 #
 # Backs up all the files and database of live site
 #
 #  Usage:
-# ./backup-all-live.sh
-
+# ./backup-all-dev.sh
 # 
 #
 # @author <andrew@nomstock.com>
@@ -35,7 +34,9 @@ source "${DIR%%/}/config-bash-advanced.conf";
 
 
 #files
-command "${DIR%%/}/backup-files-live.sh";
+command "${DIR%%/}/backup-files-dev.sh";
 #database
-command "${DIR%%/}/backup-database-live.sh";
+command "${DIR%%/}/backup-database-dev.sh";
 
+#tar database file to file location.
+gzip -c  ${DEV_BACKUP_FILE} > ${LOCAL_BACKUP_DIR}/${DOMAIN}-DEV-${ARCHIVE_FILE_ENDING}.sql.gz

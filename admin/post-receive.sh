@@ -28,7 +28,7 @@ DIR_PARENT=$(dirname $DIR)
 
 #read common variables for all bash scripts
 source "${DIR%%/}/config-bash.conf";
-
+source "${DIR%%/}/config-bash-advanced.conf";
 
 
 #############################
@@ -38,6 +38,7 @@ source "${DIR%%/}/config-bash.conf";
 LOGFILE="${DIR%%/}/post-receive.log";
 WORKTREE="${LIVE_DIR_PATH}";
 ARCHIVE_BRANCH=LIVE-ARCHIVE-$( date +%Y-%m-%d-%H-%M-%S)
+ARCHIVE_BRANCH=LIVE-ARCHIVE-"${ARCHIVE_FILE_ENDING}"
 #############################
 # Initialize
 ##############################

@@ -43,7 +43,7 @@ echo 'MySQL connecting to destination database over SSH tunnel';
 command="cat ${SOURCE_BACKUP_FILE} | mysql --defaults-file=${DEST_DEFAULTS_FILE} -P ${LOCAL_SSH_FORWARDING_PORT}  -h 127.0.0.1 --database=${DEST_DB_NAME};";
 else
 echo 'MySQL connecting to destination database over local connection';
-command="cat ${SOURCE_BACKUP_FILE}| mysql --defaults-file=${DEST_DEFAULTS_FILE} --database=${DEST_DB_NAME};";
+command="cat ${SOURCE_BACKUP_FILE}| mysql --defaults-file=${DEST_DEFAULTS_FILE} -h ${DEST_DB_HOST} --database=${DEST_DB_NAME};";
 
 fi
 

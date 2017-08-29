@@ -33,6 +33,7 @@ source "${DIR%%/}/config-bash-advanced.conf";
 
 #config
 
+DEST_DB_HOST="${LIVE_DB_HOST}";
 
 DEST_DATABASE_IS_REMOTE="${LIVE_DATABASE_IS_REMOTE}";
 

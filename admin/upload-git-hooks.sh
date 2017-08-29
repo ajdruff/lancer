@@ -34,10 +34,16 @@ source "${DIR%%/}/config-bash.conf";
 # use source + echo . this allows you to source in local scripts  
 # cat ${DIR%%/}/commands.inc.sh | ssh ${SSH_CONNECTION} 'bash -s';
 # echo 'git init';
-source ${DIR%%/}/setup-repo-remote.inc.sh | ssh ${SSH_CONNECTION} 'bash -s';
 
-echo 'Creating New Repo on remote server and uploading post-receive script';
 
-source ${DIR%%/}/upload-git-hooks.sh;
+scp ${DIR%%/}/post-receive.sh ${SSH_CONNECTION}:.git/hooks/post-receive;
+scp ${DIR%%/}/post-receive-functions.sh ${SSH_CONNECTION}:.git/hooks/post-receive-functions.sh;
+scp ${DIR%%/}/config-bash.conf ${SSH_CONNECTION}:.git/hooks/config-bash.conf;
+scp ${DIR%%/}/config-bash.conf ${SSH_CONNECTION}:.git/hooks/config-bash-advanced.conf;
 
-echo 'Completed remote repo creation';
+scp ${DIR%%/}/git-info-exclude.conf ${SSH_CONNECTION}:.git/info/exclude;
+
+echo 'chmod 700 .git/hooks/post-receive' | ssh ${SSH_CONNECTION} 'bash -s';
+echo 'chmod 700 .git/hooks/config-bash.conf' | ssh ${SSH_CONNECTION} 'bash -s';
+echo 'chmod 700 .git/hooks/config-bash-advanced.conf' | ssh ${SSH_CONNECTION} 'bash -s';
+echo 'Completed post receive upload';

@@ -63,6 +63,13 @@ fi
 echo "command  = $command";
 eval $command;
 
+echo 'Compressing temporary backup file and copying it to the final backup location';
 
+#tar database file to backup location
+command="gzip -c  ${SOURCE_BACKUP_FILE} > ${LOCAL_BACKUP_DIR}/${DOMAIN}-${ENVIRONMENT}-${ARCHIVE_FILE_ENDING}.sql.gz";
+
+#gzip -c  ${SOURCE_BACKUP_FILE} > ${LOCAL_BACKUP_DIR}/${DOMAIN}-${ENVIRONMENT}-${ARCHIVE_FILE_ENDING}.sql.gz
+echo "command  = $command";
+eval $command;
 
 echo "${DEST_DB_NAME} database has been updated";

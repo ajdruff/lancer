@@ -11,7 +11,7 @@
 #
 #
 # @author <andrew@nomstock.com>
-#
+# @todo change mysql backup script to save in the same format as the the files - to the backups directory,zipped and renamed to include time of backup
 #################
  
 
@@ -37,5 +37,6 @@ SOURCE_DATABASE_IS_REMOTE="${LIVE_DATABASE_IS_REMOTE}";
 SOURCE_MYSQL_DEFAULTS_FILE="${LIVE_MYSQL_DEFAULTS_FILE}";#name of mysql --defaults-file containing username and passwords (in the same directory as this file)
 SOURCE_BACKUP_FILE="${LIVE_BACKUP_FILE}"; #absolute file path to where we stash the source db and where we restore it from
 SOURCE_DB_NAME="${LIVE_DB_NAME}";
+ENVIRONMENT="LIVE";
 
 source "${DIR%%/}/backup-database.inc.sh";
