@@ -13,36 +13,63 @@
  
 
 
-
-
 #get the directory this file is in
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 #get its parent directory pat
 DIR_PARENT=$(dirname $DIR)
 
-#read common variables for all bash scripts
-source "${DIR%%/}/config-bash.conf";
 
 
-echo 'Copying Public Key to Remote Server';
-echo 'You will be prompted for the SSH Passwored 3 times. Once it is uploaded, you will no longer be prompted.';
+#get the configuration variables
+source "${DIR%%/}/.bin/lancer.conf.sh";
 
-#make the remote .ssh directory
-echo "mkdir ${LIVE_DIR_PATH}/.ssh" | ssh ${SSH_CONNECTION} 'bash -s';
+#include common functions
+source "${DIR%%/}/.bin/functions.sh";
 
-#upload the key securely to the server
-scp ${LOCAL_SSH_PUBLIC_KEY_PATH} ${SSH_CONNECTION}:${LIVE_DIR_PATH}/.ssh/id_rsa.pub
+#check that server environment was passed
+getServerEnvFromArg $1
 
-#add the key to the authorize keys file and set permissions
-command="\
-cat ${LIVE_DIR_PATH}/.ssh/id_rsa.pub >> ${LIVE_DIR_PATH}/.ssh/authorized_keys;\
-rm ${LIVE_DIR_PATH}/.ssh/id_rsa.pub;\
-chmod  500 ${LIVE_DIR_PATH}/.ssh;\
-chmod 400 ${LIVE_DIR_PATH}/.ssh/authorized_keys\
-";
+#Now that we know environment, get appropriate values
+getEnvVars
+
+#set PUBLIC_KEY
+setPublicKey
+
+#Stop Upload if Key Has Already Been Uploaded
+preventDuplicateKeyUpload
 
 
-echo ${command} | ssh ${SSH_CONNECTION} 'bash -s';
+
+
+#add our public key to authorized_keys
+remote_command="\
+mkdir -p ${REMOTE_DIR_PATH}/.ssh;\
+chmod  600 ${REMOTE_DIR_PATH}/.ssh;\
+chmod 600 ${REMOTE_DIR_PATH}/.ssh/authorized_keys;\
+echo \""${PUBLIC_KEY}\"" >> ${REMOTE_DIR_PATH}/.ssh/authorized_keys;\
+chmod  500 ${REMOTE_DIR_PATH}/.ssh;\
+chmod 500 ${REMOTE_DIR_PATH}/.ssh/authorized_keys;\
+";  
+
+echo $remote_command;
+
+
+
+exit;
+
+
+echo "Connecting to ${SSH_CONNECTION} ..."
+read -p "Press [Enter] to  upload your public key to the remote server...";
+echo "${remote_command}" | ssh ${SSH_CONNECTION} 'bash -s';
+
+
+
+#track the keys that have been uploaded so we don't duplicate the upload
+echo "\"${public_key}\"" >> "${UPLOADED_KEYS_FILE}"
+
+
+
+
 
 echo "Completed Key Upload";
