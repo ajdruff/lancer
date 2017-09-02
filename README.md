@@ -55,14 +55,23 @@ Configuration files consist of:
 sample file:
 
 
-    Host example.com
+    Host ex example.com
+        User joe
         HostName example.com
         Port 2222
         PreferredAuthentications publickey,password
         IdentityFile /path/to/local/id_rsa
 
->IdentifyFile = private key file. if you have this, you don't need ssh-agent or pageant, if you don't use a passphra
+>IdentifyFile = private key file. tells ssh where to find the private key. if it has a passphrase, you'll be prompted for it each time you login unless you are running ssh-agent
 >**for more information, see [OpenSSH/Client Configuration Files](https://en.wikibooks.org/wiki/OpenSSH/Client_Configuration_Files)
+
+
+For the given ssh config file, all the following logins will work:
+
+        ssh joe@example.com
+        ssh ex
+        ssh -p 2222 joe@example.com
+
 
             
             
