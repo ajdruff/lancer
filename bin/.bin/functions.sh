@@ -1,7 +1,7 @@
 
 
-#check $1 is a valid environment
-function getServerEnvFromArg()
+#sets SERVER_ENV variable from passed $1 argument
+function setServerEnvFromArg()
 {
    if [ $# -eq 0 ]
   then
@@ -30,16 +30,16 @@ function getEnvVars()
 #SSH_USER
 var="$SERVER_ENV"_SSH_USER
 SSH_USER="${!var}"
-echo $SSH_USER
+
 
 #SSH_HOST
 var="$SERVER_ENV"_SSH_HOST
 SSH_HOST="${!var}"
-echo $SSH_HOST
+
 
 #SSH_CONNECTION
 SSH_CONNECTION="${SSH_USER}"@"${SSH_HOST}"
-echo $SSH_CONNECTION
+
 
 
 
@@ -50,7 +50,7 @@ echo $SSH_CONNECTION
 #REMOTE_DIR_PATH
 var="$SERVER_ENV"_DIR_PATH
 REMOTE_DIR_PATH="${!var}"
-echo $REMOTE_DIR_PATH;
+
 
 }
 

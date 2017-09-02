@@ -28,7 +28,7 @@ source "${DIR%%/}/.bin/lancer.conf.sh";
 source "${DIR%%/}/.bin/functions.sh";
 
 #check that server environment was passed
-getServerEnvFromArg $1
+setServerEnvFromArg $1
 
 #Now that we know environment, get appropriate values
 getEnvVars
@@ -41,22 +41,19 @@ preventDuplicateKeyUpload
 
 
 
-
 #add our public key to authorized_keys
 remote_command="\
 mkdir -p ${REMOTE_DIR_PATH}/.ssh;\
-chmod  600 ${REMOTE_DIR_PATH}/.ssh;\
-chmod 600 ${REMOTE_DIR_PATH}/.ssh/authorized_keys;\
+chmod  700 ${REMOTE_DIR_PATH}/.ssh;\
+chmod 700 ${REMOTE_DIR_PATH}/.ssh/authorized_keys;\
+cp ${REMOTE_DIR_PATH}/.ssh/authorized_keys ${REMOTE_DIR_PATH}/.ssh/authorized_keys-backup;\
+
 echo \""${PUBLIC_KEY}\"" >> ${REMOTE_DIR_PATH}/.ssh/authorized_keys;\
-chmod  500 ${REMOTE_DIR_PATH}/.ssh;\
 chmod 500 ${REMOTE_DIR_PATH}/.ssh/authorized_keys;\
+chmod  500 ${REMOTE_DIR_PATH}/.ssh;\
 ";  
 
-echo $remote_command;
 
-
-
-exit;
 
 
 echo "Connecting to ${SSH_CONNECTION} ..."
@@ -66,7 +63,7 @@ echo "${remote_command}" | ssh ${SSH_CONNECTION} 'bash -s';
 
 
 #track the keys that have been uploaded so we don't duplicate the upload
-echo "\"${public_key}\"" >> "${UPLOADED_KEYS_FILE}"
+echo "\"${PUBLIC_KEY}\"" >> "${UPLOADED_KEYS_FILE}"
 
 
 
