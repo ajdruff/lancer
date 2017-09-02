@@ -1,0 +1,42 @@
+[mysql_files]
+#name of mysql --defaults-files
+LIVE_MYSQL_DEFAULTS_FILE="config-mysql-live.conf"
+STAGE_MYSQL_DEFAULTS_FILE="config-mysql-stage.conf"
+DEV_MYSQL_DEFAULTS_FILE="config-mysql-dev.conf"
+
+
+[cache]
+#absolute file path to where we stash the source db and where we restore it from
+CACHE_DIR=${DIR_PARENT%%/}/cache
+LIVE_BACKUP_FILE="${CACHE_DIR%%/}/wp_live_backup.sql";
+DEV_BACKUP_FILE="${CACHE_DIR%%/}/wp_dev_backup.sql";
+
+#file path that holds common sql settings
+SQL_SETTINGS_FILE="${DIR%%/}/lancer.conf.sql"; 
+
+
+#absolute file path to where we save remote backups.
+LOCAL_BACKUP_DIR="${DIR_PARENT%%/}/temp/backups"; 
+
+#Sets SQL variables for conversion
+DEV_TO_LIVE_CONVERSION_FILE="${DIR%%/}/fix-domain-dev-to-live.sql"; 
+DEV_TO_STAGE_CONVERSION_FILE="${DIR%%/}/fix-domain-dev-to-stage.sql"; 
+LIVE_TO_DEV_CONVERSION_FILE="${DIR%%/}/fix-domain-live-to-dev.sql"; 
+LIVE_TO_STAGE_CONVERSION_FILE="${DIR%%/}/fix-domain-live-to-stage.sql"; 
+
+
+
+[backups]
+#the text you want to be added to each backup file.
+#ARCHIVE_FILE_ENDING=$(date '+%Y-%m-%d-%H-%M')
+
+
+[deprecated]
+LIVE_EXPORT_OPTIONS_QUERY_FILE="${DIR%%/}/export-options.sql";
+DEV_EXPORT_OPTIONS_QUERY_FILE="${DIR%%/}/export-options.sql";
+STAGE_EXPORT_OPTIONS_QUERY_FILE="${DIR%%/}/export-options.sql";
+
+LIVE_IMPORT_OPTIONS_QUERY_FILE="${DIR%%/}/import-options.sql";
+DEV_IMPORT_OPTIONS_QUERY_FILE="${DIR%%/}/import-options.sql";
+STAGE_IMPORT_OPTIONS_QUERY_FILE="${DIR%%/}/import-options.sql";
+

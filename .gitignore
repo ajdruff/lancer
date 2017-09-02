@@ -1,11 +1,9 @@
 /adhoc
-/admin/*config-*
+/etc/*.conf*
+!/etc/*.conf-sample
 /temp
-/admin/.archive
+/cache
 *.log
 *.gz
 *.tar
-/nbproject/private/
-/admin/test
-/admin/old-slide-rule-scripts
 /nbproject

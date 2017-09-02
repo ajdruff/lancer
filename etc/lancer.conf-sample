@@ -1,0 +1,94 @@
+
+######################
+#
+# Configuration
+#
+#####################
+# Notes
+# Absolute file paths: do not include tilde ~ or  trailing slash
+#
+[server]
+#production domain example.com
+DOMAIN=
+
+[live]
+
+#absolute path to root directory; /home/username
+LIVE_DIR_PATH=
+
+#database name; username_wordpress
+LIVE_DB_NAME=
+
+#whether database server requires ssh connection; true
+LIVE_DATABASE_IS_REMOTE=
+
+
+[stage]
+#staging server enabled for use ; false
+STAGE_ENABLED=false;
+
+#absolute path to root directory; /home/username/stage
+STAGE_DIR_PATH=
+
+#database name; username_wordpress
+STAGE_DB_NAME=
+
+
+#whether database server requires ssh connection; true
+STAGE_DATABASE_IS_REMOTE=
+
+
+
+[dev]
+
+#database name; username_wordpress
+DEV_DB_NAME=
+
+
+#whether database server requires ssh connection; true
+DEV_DATABASE_IS_REMOTE=
+
+
+[ssh]
+
+#ssh username ; myusername
+LIVE_SSH_USER=
+
+#ssh hostname ; example.com
+LIVE_SSH_HOST=
+
+#ssh username ; myusername
+DEV_SSH_USER=
+
+#ssh hostname ; example.com
+DEV_SSH_HOST=
+
+
+#ssh username ; myusername
+STAGE_SSH_USER=
+
+#ssh hostname ; example.com
+STAGE_SSH_HOST=
+
+#local file path to public key ; /path/to/public/key/id_rsa.pub
+LIVE_LOCAL_PUBLIC_KEY_PATH=
+DEV_LOCAL_PUBLIC_KEY_PATH=
+STAGE_LOCAL_PUBLIC_KEY_PATH=
+
+
+
+[git]
+#file path to local directory containing dev repo ; /c/path/to/dev/files
+LOCAL_REPO_PATH=
+
+[deprecated]
+#site template directory 
+#contains a copy of the files that serve as the beginning basis of the site
+#no ending slash
+SITE_TEMPLATE_PATH=/cygdrive/c/wamp/www/clients/_site_templates/bplate-wp;
+HTML_DIRNAME=public_html #document root directory name e.g: public_html #name only , no path
+GIT_USER_EMAIL="user@example.com"; #user.email used to configure remote repo git e.g.: joel@example.com
+GIT_USER_NAME="First Last Name";# user.name used to configure remote repo git e.g: Joe Smith
+
+LOCAL_SSH_FORWARDING_PORT=5555; # local forwarding port for ssh tunnel to connect via mysql. can't be 3306 if also running mysql on same computer this script is run
+
