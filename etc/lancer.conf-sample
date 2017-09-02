@@ -1,55 +1,85 @@
+
+######################
+#
+# Configuration
+#
+#####################
+# Notes
+# Absolute file paths: do not include tilde ~ or  trailing slash
+#
 [server]
-DOMAIN=example.com
+#production domain example.com
+DOMAIN=
 
 [live]
 
-#LIVE_DIR_PATH=/home/username #remote server's absolute path of parent directory containing all production files #no tilde, no trailing slash
+#absolute path to root directory; /home/username
 LIVE_DIR_PATH=
 
-#LIVE_DB_NAME=wp_live #live database name
+#database name; username_wordpress
 LIVE_DB_NAME=
 
-#LIVE_DATABASE_IS_REMOTE=true #true if it requires $SSH_CONNECTION
-LIVE_DATABASE_IS_REMOTE=true
+#whether database server requires ssh connection; true
+LIVE_DATABASE_IS_REMOTE=
 
 
 [stage]
+#staging server enabled for use ; false
 STAGE_ENABLED=false;
-#STAGE_DIR_PATH=/home/username/stage; #remote server's absolute path of parent directory containing all stage files #no tilde,no trailing slash .e.g: /home/username/stage
+
+#absolute path to root directory; /home/username/stage
 STAGE_DIR_PATH=
 
-#STAGE_DB_NAME=wp_stage; #remote setage database name e.g.: wp_stage
+#database name; username_wordpress
 STAGE_DB_NAME=
 
 
-#STAGE_DATABASE_IS_REMOTE=true; #true if it requires $SSH_CONNECTION / false if can connect locally
+#whether database server requires ssh connection; true
 STAGE_DATABASE_IS_REMOTE=
 
 
 
 [dev]
 
-#DEV_DB_NAME=wp_dev #dev database name
+#database name; username_wordpress
 DEV_DB_NAME=
 
 
-#DEV_DATABASE_IS_REMOTE=true #true if it requires $SSH_CONNECTION
-DEV_DATABASE_IS_REMOTE=true
+#whether database server requires ssh connection; true
+DEV_DATABASE_IS_REMOTE=
 
 
 [ssh]
 
+#ssh username ; myusername
+LIVE_SSH_USER=
 
-SSH_CONNECTION=user@example.com; # e.g. : user@example.com #ssh username and host to connect to remote host
-LOCAL_SSH_FORWARDING_PORT=5555; # local forwarding port for ssh tunnel to connect via mysql. can't be 3306 if also running mysql on same computer this script is run
+#ssh hostname ; example.com
+LIVE_SSH_HOST=
+
+#ssh username ; myusername
+DEV_SSH_USER=
+
+#ssh hostname ; example.com
+DEV_SSH_HOST=
 
 
-#Public Key Path used for uploading the key in setup-keys.sh
-LOCAL_SSH_PUBLIC_KEY_PATH=/cygdrive/c/cygwin/home/username/.ssh/id_rsa.pub; #the absolute path to your public key , e.g; /cygdrive/c/cygwin/home/username/.ssh/id_rsa.pub
+#ssh username ; myusername
+STAGE_SSH_USER=
+
+#ssh hostname ; example.com
+STAGE_SSH_HOST=
+
+#local file path to public key ; /path/to/public/key/id_rsa.pub
+LIVE_LOCAL_PUBLIC_KEY_PATH=
+DEV_LOCAL_PUBLIC_KEY_PATH=
+STAGE_LOCAL_PUBLIC_KEY_PATH=
+
 
 
 [git]
-LOCAL_REPO_PATH=/cygdrive/c/wamp/example.com/www; #absolute path (no trailing slash) of the local git directory containing the files to be uploaded to the server e.g: /cygdrive/c/wamp/example.com/www
+#file path to local directory containing dev repo ; /c/path/to/dev/files
+LOCAL_REPO_PATH=
 
 [deprecated]
 #site template directory 
@@ -60,7 +90,5 @@ HTML_DIRNAME=public_html #document root directory name e.g: public_html #name on
 GIT_USER_EMAIL="user@example.com"; #user.email used to configure remote repo git e.g.: joel@example.com
 GIT_USER_NAME="First Last Name";# user.name used to configure remote repo git e.g: Joe Smith
 
-
-
-[advanced]
+LOCAL_SSH_FORWARDING_PORT=5555; # local forwarding port for ssh tunnel to connect via mysql. can't be 3306 if also running mysql on same computer this script is run
 
