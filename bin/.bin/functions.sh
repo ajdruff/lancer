@@ -1,3 +1,18 @@
+#!/usr/bin/bash
+
+#################
+# 
+#
+#
+# Description
+#
+#  Usage:
+# 
+#
+#
+# @author andrew@nomstock.com
+# @todo low: consider refactoring to use get_script_dir. see http://www.ostricher.com/2014/10/the-right-way-to-get-the-directory-of-a-bash-script/
+#################
 
 
 #sets SERVER_ENV variable from passed $1 argument
@@ -114,4 +129,54 @@ fi
 var="$SERVER_ENV"_PUBLIC_KEY
 PUBLIC_KEY="${!var}"
 
+}
+
+
+
+function show_remote_exec_message()
+{
+
+echo "Connecting to ${SSH_CONNECTION} ..."
+read -p "${1}"
+
+}
+
+
+function exec_remote()
+{
+
+echo "${remote_command}" | ssh ${SSH_CONNECTION} 'bash -s';
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+get_script_dir () {
+     SOURCE="${BASH_SOURCE[0]}"
+     # While $SOURCE is a symlink, resolve it
+     while [ -h "$SOURCE" ]; do
+          DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+          SOURCE="$( readlink "$SOURCE" )"
+          # If $SOURCE was a relative symlink (so no "/" as prefix, need to resolve it relative to the symlink base directory
+          [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+     done
+     DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+     echo "$DIR"
 }
