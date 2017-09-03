@@ -12,6 +12,7 @@
 #
 # @author andrew@nomstock.com
 # @todo low: consider refactoring to use get_script_dir. see http://www.ostricher.com/2014/10/the-right-way-to-get-the-directory-of-a-bash-script/
+# @todo low: consider downloading authorized_keys file to cache and using it to compare key for upload instead of to cached file.
 #################
 
 
@@ -80,6 +81,13 @@ function preventDuplicateKeyUpload ()
 UPLOADED_KEYS_FILE="${CACHE_DIR}"/"${SERVER_ENV}"_uploaded_keys
 
 
+if [[ "${PUBLIC_KEY}" == "" ]];then
+
+echo 'Public Key is empty, exiting...';
+exit;
+fi
+
+
 #if the uploaded keys file exists, check if it contains the public key
 if [ -e ${UPLOADED_KEYS_FILE} ]
 
@@ -116,7 +124,6 @@ fi
 
 if [ -e "${DEV_LOCAL_PUBLIC_KEY_PATH}" ]
 then
-echo exists
 DEV_PUBLIC_KEY=$( cat "${DEV_LOCAL_PUBLIC_KEY_PATH}" )
 fi
 
@@ -127,7 +134,13 @@ fi
 
 
 var="$SERVER_ENV"_PUBLIC_KEY
-PUBLIC_KEY="${!var}"
+PUBLIC_KEY=$(echo "${!var}" | xargs ); #xargs to trim spaces
+
+if [[ "${PUBLIC_KEY}" == "" ]];then
+
+echo 'Public Key is empty, exiting...';
+exit;
+fi
 
 }
 
@@ -161,8 +174,12 @@ echo "${remote_command}" | ssh ${SSH_CONNECTION} 'bash -s';
 
 
 
-
-
+#like it says
+#usage var=$( trim " something " ) #'something';
+function trim()
+{
+echo "   ${1}  " | xargs
+}
 
 
 
@@ -180,3 +197,5 @@ get_script_dir () {
      DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
      echo "$DIR"
 }
+
+
