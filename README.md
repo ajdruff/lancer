@@ -4,55 +4,76 @@
 A WordPress Toolset that helps to manage local dev and live environments.
 
 
-#Who needs it
+# Who needs it
 
 If you develop on WordPress and/or do frequent WordPress setups, and migrations (from one domain or host to another).
 
-#Why you need it
+# Why you need it
 
 * Easily upload keys with one command
 * Easily backup, publish without relying on plugins.
 * packages all configuration on one place 
 
-#Tutorials
+# Tutorials
 
 * see [Lancer for WordPress Tutorials](#)
 
 
-#Requirements
+# Prepare
 
+## Requirements
 * bash
-* git 
+* git
+* openssh
 
-For Windows users, cygwin is not supported. Instead, install the excellent Git for Windows, and run it from within the Git Bash. 
-
-For more on how you can setup a nice Windows environment, see [Setup an Awesome MingGW Linux Development Environment in Windows](#)
+For Windows users, cygwin is not supported. Instead, install the excellent Git for Windows, and run lancer from within the Git Bash. 
 
 
-#Configure
 
-Configuration files consist of:
 
-* `lancer.conf`  
-    * contains general configuration options.
-    * you must first create it on installation from lancer.conf-sample
-* `.lancer-conf`
-    * contains advanced configuration options
-* `~/.ssh/config` (optional)
-    * if your ssh connection requires a different port or other command line switches, configure it using a ssh_config file located within your local .ssh directory. see open_ssh documentation for more details or README for basic usage.
+## SSH Keys
 
-#Usage
+Lancer makes extensive use of SSH for access to remote servers.
 
+To generate your Public/Private key pair:
+
+    ssh-keygen
+    
+and follow the prompts. When you are finished, you will have 2 files, .id_rsa, the private key and id_rsa.pub, the public key.     
+
+>To avoid overwriting any existing private key, create a project directory at ~/.ssh/project-name and create the keys there.
+
+
+**Windows Users**
+
+PuttyGen can be used to generate keys but it is not recommended since by default the public key it saves is in a format that will not work 
+
+In Putty Key Generator (puttygen.exe):
+ 
+1. Click `Generate`
+2. Click `Save private key` and save as `id_rsa.ppk`. This will save a file for use by PuTTY only. It contains both public and private keys.
+3. Click `Conversions / Export OpenSSH key` and save as `id_rsa` with no file extension. This saves the private key in the standard OpenSSH format.
+4. **Do NOT  use the `save public key' feature of PuTTYGen.** 
+    Instead do this :
+
+    * Copy the contents within the text box labeled `Public key for pasting into OpenSSH authorized_keys file`.
+    * Create a file in notepad and name it `id_rsa.pub`. Paste the contents that you just copied into the file and save it. 
+
+>PuTTYGen's `Save Public Key` button should not be used to save public keys. The reason is that it will save the key with dashed lines and without the `ssh-rsa` prefix that openssh  looks for.
+
+
+
+
+
+
+
+# Installation
 
 ##Step 1 - Configure
 
 1. create lancer.conf from lancer.conf-sample 
-2. edit lancer.conf for your installation
-3. For each remote server, if ssh connection is on a alternate port or requires custom switches, create or edit `.ssh/config` .
-4. If you use a passphrase on your keys, you'll need to run `ssh-agent` or [pageant](https://www.ssh.com/ssh/putty/putty-manuals/0.68/Chapter9.html)
-
-
-sample file:
+2. edit lancer.conf with values for your installation
+3. For each remote server, if ssh connection is on an alternate port or requires custom switches, create or edit `.ssh/config` : 
 
 
     Host ex example.com
@@ -61,12 +82,13 @@ sample file:
         Port 2222
         PreferredAuthentications publickey,password
         IdentityFile /path/to/local/id_rsa
+        AddKeysToAgent yes
 
 >IdentifyFile = private key file. tells ssh where to find the private key. if it has a passphrase, you'll be prompted for it each time you login unless you are running ssh-agent
 >**for more information, see [OpenSSH/Client Configuration Files](https://en.wikibooks.org/wiki/OpenSSH/Client_Configuration_Files)
 
 
-For the given ssh config file, all the following logins will work:
+For the given ssh config file, all the following logins are valid:
 
         ssh joe@example.com
         ssh ex
@@ -75,13 +97,13 @@ For the given ssh config file, all the following logins will work:
 
             
             
-##Step X - Upload Public Keys
+## Step X - Upload Public Keys
 
-###setup keys for each environment that you will be remotely conntecting to:
+### setup keys for each environment that you will be remotely conntecting to:
 
     ./setup-keys.sh live
 
-###option if your dev and stage servers are remote:
+###(optional) if your dev and stage servers are remote:
 
 
     ./setup-keys.sh dev
@@ -90,14 +112,20 @@ For the given ssh config file, all the following logins will work:
 ###Step X -     
 
 
-#Contributors
+
+# Usage
+
+
+
+
+# Contributors
 
 Andrew Druffner `<andrew@nomstock.com>`
     
-#Dev Notes
+# Dev Notes
 
 
-##History
+## History
 
 lancer is a rewrite of [slide rule](https://github.com/ajdruff/slide-rule)
 
@@ -109,18 +137,14 @@ The intent of the rewrite is to:
 * increase code maintainability
 
 
-##RoadMap
+## RoadMap
 
 lancer is destined to be a nodejs app once its been refactored as a messy set of bash scripts.
 
-##todo
-
-* create branch lancerjs
-* create console wizard that will prompt user for configuration. do this as a lancerjs app first, don't bother writing it in bash.
-* change all sql scripts to bash scripts using this as a guide: https://stackoverflow.com/a/25109187/3306354 . take into  consideration moving sql variables to lancer.conf, so should be no need for lancer.sql.conf
 
 
-##ChangeLog
+
+## ChangeLog
 
 **8/29/2017**
 
