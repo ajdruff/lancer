@@ -1,17 +1,15 @@
 #!/usr/bin/bash
 
 #################
-# template-bash-script.sh
+# 
 #
 #
 # Description
-#
-#  Usage:
-# ./template-bash-script.sh
+# 
 #
 #
-# @author <user@example.com>
-#
+# @author andrew@nomstock.com
+# @todo:
 #################
  
 
