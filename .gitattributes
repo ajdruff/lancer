@@ -1,6 +1,12 @@
 # These settings are for any web project
 # 
 
+#Don't download these
+
+/.bin/.todo export-ignore
+/.bin/.deprecated export-ignore
+
+
 # Handle line endings automatically for files detected as text
 # and leave all files detected as binary untouched.
 * text=auto
