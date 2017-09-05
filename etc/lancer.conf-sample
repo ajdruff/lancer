@@ -18,13 +18,21 @@ LIVE_DIR_PATH=
 #database name; username_wordpress
 LIVE_DB_NAME=
 
+#whether web server file backup requires ssh connection; true
+LIVE_DIRECTORY_IS_REMOTE
+
+
 #whether database server requires ssh connection; true
 LIVE_DATABASE_IS_REMOTE=
-
 
 [dev]
 #absolute path to root directory; /home/username
 DEV_DIR_PATH=
+
+
+#whether database server requires ssh connection; true
+DEV_DIRECTORY_IS_REMOTE=false
+
 
 #database name; username_wordpress
 DEV_DB_NAME=
@@ -41,11 +49,19 @@ STAGE_ENABLED=false;
 #absolute path to root directory; /home/username/stage
 STAGE_DIR_PATH=
 
+
+#whether web server requires ssh connection; true
+STAGE_DIRECTORY_IS_REMOTE=true
+
+
 #database name; username_wordpress
 STAGE_DB_NAME=
 
+
 #whether database server requires ssh connection; true
 STAGE_DATABASE_IS_REMOTE=
+
+
 [ssh]
 
 #ssh username ; myusername
@@ -72,12 +88,13 @@ LIVE_LOCAL_PUBLIC_KEY_PATH=
 DEV_LOCAL_PUBLIC_KEY_PATH=
 STAGE_LOCAL_PUBLIC_KEY_PATH=
 
-
 [backups]
 #compression format for file backups ; tar/zip/none
 FILE_BACKUP_COMPRESSION=tar; 
 
-
+LIVE_RSYNC_EXCLUDE_FILE="rsync-exclude-LIVE.conf-sample"
+DEV_RSYNC_EXCLUDE_FILE="rsync-exclude-DEV.conf-sample"
+STAGE_RSYNC_EXCLUDE_FILE="rsync-exclude-STAGE.conf-sample"
 
 [git]
 #file path to local directory containing dev repo ; /c/path/to/dev/files

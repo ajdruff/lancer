@@ -49,13 +49,13 @@ SSH_USER="${!var}"
 
 
 #SSH_HOST
-var="$SERVER_ENV"_SSH_HOST
+
+var="${SERVER_ENV}"_SSH_HOST
 SSH_HOST="${!var}"
 
 
 #SSH_CONN ; we use SSH_CONNECT since SSH_CONNECTION is a system variable
 SSH_CONN="${SSH_USER}"@"${SSH_HOST}"
-
 
 #REMOTE_DIR_PATH
 var="$SERVER_ENV"_DIR_PATH
@@ -71,7 +71,9 @@ var="$SERVER_ENV"_DIR_PATH
 SOURCE_DIRECTORY_PATH="${!var}"
 
 
-
+#RSYNC_EXCLUDE_FILE
+var="$SERVER_ENV"_RSYNC_EXCLUDE_FILE
+RSYNC_EXCLUDE_FILE="${!var}"
 
 
 }

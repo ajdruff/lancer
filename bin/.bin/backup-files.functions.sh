@@ -51,7 +51,6 @@ if [[ "${SOURCE_DIRECTORY_IS_REMOTE}" == true ]]; then
 SOURCE_DIRECTORY_PATH="-e ssh ${SSH_CONN}:${SOURCE_DIRECTORY_PATH}"
 fi
 
-
 }
 
 ##################################################
@@ -62,9 +61,9 @@ setCompressionCommands
 
 # Check for Dry Run
 
-backup_command_dryrun="rsync  -azvH   --delete  --dry-run  ${SOURCE_DIRECTORY_PATH} ${LOCAL_BACKUP_DIR_EXTENDED}/${MIRROR_BACKUP_DIRNAME}";
+backup_command_dryrun="rsync  -azvH   --delete  --exclude-from ${LANCER_DIR}/etc/${RSYNC_EXCLUDE_FILE} --dry-run  ${SOURCE_DIRECTORY_PATH} ${LOCAL_BACKUP_DIR_EXTENDED}/${MIRROR_BACKUP_DIRNAME}";
 
-backup_command="rsync  -azvH   --delete  ${SOURCE_DIRECTORY_PATH} ${LOCAL_BACKUP_DIR_EXTENDED}/${MIRROR_BACKUP_DIRNAME}";
+backup_command="rsync  -azvH   --delete --exclude-from ${LANCER_DIR}/etc/${RSYNC_EXCLUDE_FILE} ${SOURCE_DIRECTORY_PATH} ${LOCAL_BACKUP_DIR_EXTENDED}/${MIRROR_BACKUP_DIRNAME}";
 
 
 
@@ -88,7 +87,7 @@ function doBackup() {
 
 if [[ "${DRY_RUN}" == true ]];then 
 
-echo "${backup_command_dryrun}"
+eval "${backup_command_dryrun}"
 else
 
 eval "${backup_command}"
