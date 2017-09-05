@@ -8,11 +8,10 @@
 # Absolute file paths: do not include tilde ~ or  trailing slash
 #
 [server]
-#production domain example.com
+#production domain; example.com
 DOMAIN=
 
 [live]
-
 #absolute path to root directory; /home/username
 LIVE_DIR_PATH=
 
@@ -21,6 +20,18 @@ LIVE_DB_NAME=
 
 #whether database server requires ssh connection; true
 LIVE_DATABASE_IS_REMOTE=
+
+
+[dev]
+#absolute path to root directory; /home/username
+DEV_DIR_PATH=
+
+#database name; username_wordpress
+DEV_DB_NAME=
+
+
+#whether database server requires ssh connection; true
+DEV_DATABASE_IS_REMOTE=
 
 
 [stage]
@@ -33,22 +44,8 @@ STAGE_DIR_PATH=
 #database name; username_wordpress
 STAGE_DB_NAME=
 
-
 #whether database server requires ssh connection; true
 STAGE_DATABASE_IS_REMOTE=
-
-
-
-[dev]
-
-#database name; username_wordpress
-DEV_DB_NAME=
-
-
-#whether database server requires ssh connection; true
-DEV_DATABASE_IS_REMOTE=
-
-
 [ssh]
 
 #ssh username ; myusername
@@ -74,6 +71,11 @@ STAGE_SSH_HOST=
 LIVE_LOCAL_PUBLIC_KEY_PATH=
 DEV_LOCAL_PUBLIC_KEY_PATH=
 STAGE_LOCAL_PUBLIC_KEY_PATH=
+
+
+[backups]
+#compression format for file backups ; tar/zip/none
+FILE_BACKUP_COMPRESSION=tar; 
 
 
 

@@ -21,7 +21,7 @@ function setServerEnvFromArg()
 {
    if [ $# -eq 0 ]
   then
-    echo "Missing argument: server environment for key destination (live,staging,or dev)"
+    echo "Missing argument: server environment for key destination (live,dev,or stage)"
     exit;
 fi
 if [[ $1 != live ]] && [[ $1 != dev ]] && [[ $1 != stage ]] ; then
@@ -57,15 +57,21 @@ SSH_HOST="${!var}"
 SSH_CONNECTION="${SSH_USER}"@"${SSH_HOST}"
 
 
-
-
-
-
-
-
 #REMOTE_DIR_PATH
 var="$SERVER_ENV"_DIR_PATH
 REMOTE_DIR_PATH="${!var}"
+
+############ BACKUPS ###################################
+#SOURCE_DIRECTORY_IS_REMOTE
+var="$SERVER_ENV"_DIRECTORY_IS_REMOTE
+SOURCE_DIRECTORY_IS_REMOTE=$(echo "${!var}" | xargs ); 
+
+#SOURCE_DIRECTORY
+var="$SERVER_ENV"_DIR_PATH
+SOURCE_DIRECTORY_PATH="${!var}"
+
+
+
 
 
 }
@@ -199,3 +205,12 @@ get_script_dir () {
 }
 
 
+
+#debug message
+function debugM {
+
+if [[ "${LANCER_DEBUG}" == true ]]; then
+echo -e "DEBUG:${1}"
+fi
+
+}

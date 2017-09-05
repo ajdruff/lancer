@@ -1,8 +1,16 @@
+#!/usr/bin/bash
 
-#####
-##  include configuration variables and process them.
-#####
-
+#################
+# 
+#
+#
+# Include configuration variables and process them.
+# 
+#
+#
+# @author andrew@nomstock.com
+# @todo: Replace references of DIR_PARENT with LANCER_DIR
+#################
 
 
 #get the parent directory of calling script

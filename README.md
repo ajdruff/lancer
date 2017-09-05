@@ -25,15 +25,53 @@ If you develop on WordPress and/or do frequent WordPress setups, and migrations 
 * bash
 * git
 * openssh
+* rsync
+* mysql client and mysql dump
 
-For Windows users, cygwin is not supported. Instead, install the excellent Git for Windows, and run lancer from within the Git Bash. 
+
+## Windows
+
+Windows users should  install Git for Windows and add rsync using mingw-get. Cygwin is not directly supported, although Git for Windows uses some cygwin translation layers.
+
+Once installed,  you can execute **lancer** from the Git for Windows Git bash console.
 
 
+**Step 1 - Install [Git For Windows](https://git-for-windows.github.io/)**
+
+**Step 2 - Install rsync** :
+
+* Install [mingw-get](https://downloads.sourceforge.net/project/mingw/Installer/mingw-get-setup.exe?r=&ts=1504488387)
+
+* Once mingw-get is installed, install the msys-rsync package:
+
+            /c/mingw/bin/mingw-get install msys-rsync
+
+* Finally, update your path by editing  `~/.bashrc` and adding the following lines :
+
+            PATH=$PATH:/c/mingw/msys/1.0/bin
+            PATH=$PATH:/c/mingw/bin
+
+** Step 3 - Install the mysql client and mysqldump **
+
+Check to see if you can run mysql and mysqldump from the command line. If you are running MySQL server on your local machine for your dev environment, you likely already have them. However, if you are accessing a virtual machine and using a console on your windows host, you might not.
+
+To get them both, install [MySQL WorkBench](https://dev.mysql.com/downloads/workbench/) .
+
+Once installed, add the following lines to your `~/.bashrc` to update your path:
+
+            PATH="/c/Program Files/MySQL/MySQL Workbench 6.3 CE":$PATH
+
+
+** Step 4 - Restart your shell or source your ~/.bashrc **
+
+Before the PATH changes can take effect, you'll need to re-run your `~/.bashrc ` script. You can do that either by starting a new bash shell, or re-sourcing:
+
+            source ~/.bashrc
 
 
 ## SSH Keys
 
-Lancer makes extensive use of SSH for access to remote servers.
+**Lancer** makes extensive use of SSH for access to remote servers.
 
 To generate your Public/Private key pair:
 
@@ -44,11 +82,12 @@ and follow the prompts. When you are finished, you will have 2 files, .id_rsa, t
 >To avoid overwriting any existing private key, create a project directory at ~/.ssh/project-name and create the keys there.
 
 
-**Windows Users**
+**SSH Keys for Windows Users**
 
-PuttyGen can be used to generate keys but it is not recommended since by default the public key it saves is in a format that will not work 
+[PuttyGen](https://www.ssh.com/ssh/putty/windows/puttygen) can be used to generate keys but it is not recommended since by default the public key it saves (even if converted to openssh) is not compatible with **lancer**. 
 
-In Putty Key Generator (puttygen.exe):
+**To create a compatible public key using PuTTYGen:** 
+
  
 1. Click `Generate`
 2. Click `Save private key` and save as `id_rsa.ppk`. This will save a file for use by PuTTY only. It contains both public and private keys.
@@ -76,27 +115,32 @@ In Putty Key Generator (puttygen.exe):
 3. For each remote server, if ssh connection is on an alternate port or requires custom switches, create or edit `.ssh/config` : 
 
 
-    Host ex example.com
-        User joe
-        HostName example.com
-        Port 2222
-        PreferredAuthentications publickey,password
-        IdentityFile /path/to/local/id_rsa
-        AddKeysToAgent yes
 
->IdentifyFile = private key file. tells ssh where to find the private key. if it has a passphrase, you'll be prompted for it each time you login unless you are running ssh-agent
->**for more information, see [OpenSSH/Client Configuration Files](https://en.wikibooks.org/wiki/OpenSSH/Client_Configuration_Files)
+            Host ex example.com
+                 User joe
+                 HostName example.com
+                 Port 2222
+                 PreferredAuthentications publickey,password
+                 IdentityFile /path/to/local/id_rsa
+                 AddKeysToAgent yes
 
 
-For the given ssh config file, all the following logins are valid:
 
-        ssh joe@example.com
-        ssh ex
-        ssh -p 2222 joe@example.com
+    >*IdentifyFile* = Tells ssh where to find the private key. Tf your private key has a passphrase, you'll be prompted for it each time you login unless you are running ssh-agent
+
+    >*AddKeysToAgent* : Tells ssh to automatically add the private key to ssh-agent once you've successfully added your passphrase.    
+
+    >**for more information, see [OpenSSH/Client Configuration Files](https://en.wikibooks.org/wiki/OpenSSH/Client_Configuration_Files)**
 
 
-            
-            
+
+
+    For the above ssh config, you can login to example.com using any of the following commands:
+
+            ssh joe@example.com
+            ssh ex
+            ssh -p 2222 joe@example.com
+
 ## Step X - Upload Public Keys
 
 ### setup keys for each environment that you will be remotely conntecting to:
