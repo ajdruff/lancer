@@ -41,7 +41,7 @@ command "${DIR%%/}/git-skip-worktree.sh";
 
 
 #clone the remote directory to local. this will create the correct origin
-git clone ssh://${SSH_CONNECTION}${LIVE_DIR_PATH}/.git ${LOCAL_REPO_PATH}/
+git clone ssh://${SSH_CONN}${LIVE_DIR_PATH}/.git ${LOCAL_REPO_PATH}/
 
 #copy the web template into the repo directory
 command "${DIR%%/}/setup-home.sh";

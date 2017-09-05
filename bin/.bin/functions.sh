@@ -53,8 +53,8 @@ var="$SERVER_ENV"_SSH_HOST
 SSH_HOST="${!var}"
 
 
-#SSH_CONNECTION
-SSH_CONNECTION="${SSH_USER}"@"${SSH_HOST}"
+#SSH_CONN ; we use SSH_CONNECT since SSH_CONNECTION is a system variable
+SSH_CONN="${SSH_USER}"@"${SSH_HOST}"
 
 
 #REMOTE_DIR_PATH
@@ -155,7 +155,7 @@ fi
 function show_remote_exec_message()
 {
 
-echo "Connecting to ${SSH_CONNECTION} ..."
+echo "Connecting to ${SSH_CONN} ..."
 read -p "${1}"
 
 }
@@ -164,7 +164,7 @@ read -p "${1}"
 function exec_remote()
 {
 
-echo "${remote_command}" | ssh ${SSH_CONNECTION} 'bash -s';
+echo "${remote_command}" | ssh ${SSH_CONN} 'bash -s';
 
 
 }

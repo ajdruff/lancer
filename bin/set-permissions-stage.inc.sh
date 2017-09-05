@@ -6,7 +6,7 @@
 #
 # Sets Permissions on remote site
 # Usage:
-# "cat ${DIR%%/}/config-bash.conf ${DIR%%/}/set-permissions-staging.inc.sh |ssh ${SSH_CONNECTION} bash -s"
+# "cat ${DIR%%/}/config-bash.conf ${DIR%%/}/set-permissions-staging.inc.sh |ssh ${SSH_CONN} bash -s"
 # @author <andrew@nomstock.com>
 #################
 

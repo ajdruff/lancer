@@ -22,7 +22,7 @@
 if [[ "${DEST_DATABASE_IS_REMOTE}" == true ]]; then 
 ## setup tunnel
 echo 'Creating SSH Tunnel to secure remote MySQL connection';
-ssh -f -o ExitOnForwardFailure=yes -L "${LOCAL_SSH_FORWARDING_PORT}":localhost:3306 "${SSH_CONNECTION}" sleep 10;
+ssh -f -o ExitOnForwardFailure=yes -L "${LOCAL_SSH_FORWARDING_PORT}":localhost:3306 "${SSH_CONN}" sleep 10;
 
 fi
 

@@ -26,7 +26,7 @@ source "${DIR%%/}/config-bash.conf";
 ########################
 
 
-command="cat ${DIR%%/}/config-bash.conf ${DIR%%/}/set-permissions-stage.inc.sh |ssh ${SSH_CONNECTION} bash -s"
+command="cat ${DIR%%/}/config-bash.conf ${DIR%%/}/set-permissions-stage.inc.sh |ssh ${SSH_CONN} bash -s"
 
 eval $command;
 

@@ -36,8 +36,8 @@ echo 'Creating an archive branch from the remote live ranch';
 ARCHIVE_BRANCH=LIVE-ARCHIVE-"${ARCHIVE_FILE_ENDING}"
 
 #execute the create branch command on the remote server
-echo "git add . && git commit -am 'Archived live changes'"  | ssh ${SSH_CONNECTION} 'bash -s';
-echo "git branch ${ARCHIVE_BRANCH} live"  | ssh ${SSH_CONNECTION} 'bash -s';
+echo "git add . && git commit -am 'Archived live changes'"  | ssh ${SSH_CONN} 'bash -s';
+echo "git branch ${ARCHIVE_BRANCH} live"  | ssh ${SSH_CONN} 'bash -s';
 
 #fetch the branches and show them
 
