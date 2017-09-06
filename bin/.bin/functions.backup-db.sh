@@ -21,9 +21,9 @@ function setSourceDBVars() {
 ############################
 
 
-#SOURCE_DATABASE_IS_REMOTE
-var="$SERVER_ENV"_DATABASE_IS_REMOTE
-SOURCE_DATABASE_IS_REMOTE=$(echo "${!var}" | xargs ); 
+#SOURCE_SSH_DB_ACCESS
+var="$SERVER_ENV"_SSH_DB_ACCESS
+SOURCE_SSH_DB_ACCESS=$(echo "${!var}" | xargs ); 
 
 #SOURCE_MYSQL_DEFAULTS_FILE
 var="$SERVER_ENV"_MYSQL_DEFAULTS_FILE
@@ -220,7 +220,7 @@ function backupDB ()
 {
 
 
-if [[ "${SOURCE_DIRECTORY_IS_REMOTE}" == true ]]; then
+if [[ "${SOURCE_SSH_FILE_ACCESS}" == true ]]; then
 
 #use SSH if source is on remote server
 backupDBServerRemote

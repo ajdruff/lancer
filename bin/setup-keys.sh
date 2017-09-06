@@ -45,16 +45,16 @@ preventDuplicateKeyUpload
 
 #add our public key to authorized_keys
 remote_command="\
-mkdir -p ${REMOTE_DIR_PATH}/.ssh;\
-chmod  700 ${REMOTE_DIR_PATH}/.ssh;\
-chmod 700 ${REMOTE_DIR_PATH}/.ssh/authorized_keys;\
-chmod 700 ${REMOTE_DIR_PATH}/.ssh/authorized_keys-backup;\
-cp ${REMOTE_DIR_PATH}/.ssh/authorized_keys \"${REMOTE_DIR_PATH}/.ssh/authorized_keys-backup\";\
+mkdir -p ${REMOTE_FILE_ROOT}/.ssh;\
+chmod  700 ${REMOTE_FILE_ROOT}/.ssh;\
+chmod 700 ${REMOTE_FILE_ROOT}/.ssh/authorized_keys;\
+chmod 700 ${REMOTE_FILE_ROOT}/.ssh/authorized_keys-backup;\
+cp ${REMOTE_FILE_ROOT}/.ssh/authorized_keys \"${REMOTE_FILE_ROOT}/.ssh/authorized_keys-backup\";\
 
-echo \""${PUBLIC_KEY}\"" >> ${REMOTE_DIR_PATH}/.ssh/authorized_keys;\
-chmod 500 ${REMOTE_DIR_PATH}/.ssh/authorized_keys;\
-chmod 500 \"${REMOTE_DIR_PATH}/.ssh/authorized_keys-backup\";\
-chmod  500 ${REMOTE_DIR_PATH}/.ssh;\
+echo \""${PUBLIC_KEY}\"" >> ${REMOTE_FILE_ROOT}/.ssh/authorized_keys;\
+chmod 500 ${REMOTE_FILE_ROOT}/.ssh/authorized_keys;\
+chmod 500 \"${REMOTE_FILE_ROOT}/.ssh/authorized_keys-backup\";\
+chmod  500 ${REMOTE_FILE_ROOT}/.ssh;\
 ";  
 
 

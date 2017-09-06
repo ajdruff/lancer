@@ -13,7 +13,7 @@ DOMAIN=
 
 [live]
 #absolute path to root directory; /home/username
-LIVE_DIR_PATH=
+LIVE_FILE_ROOT=
 
 #database name and credentials
 LIVE_DB_NAME=
@@ -25,15 +25,15 @@ LIVE_DB_HOST=127.0.0.1
 
 
 #whether web server file backup requires ssh connection; true
-LIVE_DIRECTORY_IS_REMOTE
+LIVE_SSH_FILE_ACCESS
 
 
 #whether database server requires ssh connection; true
-LIVE_DATABASE_IS_REMOTE=
+LIVE_SSH_DB_ACCESS=
 
 [dev]
 #absolute path to root directory; /home/username
-DEV_DIR_PATH=
+DEV_FILE_ROOT=
 
 
 #database name and credentials
@@ -45,7 +45,7 @@ DEV_DB_HOST=localhost
 
 
 #whether database server requires ssh connection; true
-DEV_DIRECTORY_IS_REMOTE=false
+DEV_SSH_FILE_ACCESS=false
 
 
 #database name; username_wordpress
@@ -53,7 +53,7 @@ DEV_DB_NAME=
 
 
 #whether database server requires ssh connection; true
-DEV_DATABASE_IS_REMOTE=
+DEV_SSH_DB_ACCESS=
 
 
 [stage]
@@ -61,7 +61,7 @@ DEV_DATABASE_IS_REMOTE=
 STAGE_ENABLED=false;
 
 #absolute path to root directory; /home/username/stage
-STAGE_DIR_PATH=
+STAGE_FILE_ROOT=
 
 #database name and credentials
 STAGE_DB_NAME=
@@ -72,13 +72,13 @@ STAGE_DB_HOST=127.0.0.1
 
 
 #whether web server requires ssh connection; true
-STAGE_DIRECTORY_IS_REMOTE=true
+STAGE_SSH_FILE_ACCESS=true
 
 
 
 
 #whether database server requires ssh connection; true
-STAGE_DATABASE_IS_REMOTE=
+STAGE_SSH_DB_ACCESS=
 
 
 [ssh]

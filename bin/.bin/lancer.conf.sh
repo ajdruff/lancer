@@ -33,9 +33,9 @@ source <(grep = ${lancer_conf} | sed 's/ *= */=/g')
 
 
 #strip trailing slash ref: https://stackoverflow.com/a/1848456/3306354
-LIVE_DIR_PATH=${LIVE_DIR_PATH%/}
-DEV_DIR_PATH=${DEV_DIR_PATH%/}
-STAGING_DIR_PATH=${STAGING_DIR_PATH%/}
+LIVE_FILE_ROOT=${LIVE_FILE_ROOT%/}
+DEV_FILE_ROOT=${DEV_FILE_ROOT%/}
+STAGING_FILE_ROOT=${STAGING_FILE_ROOT%/}
 CACHE_DIR="${CACHE_DIR%/}"
 
 

@@ -47,7 +47,7 @@ function checkIfRemoteSource() {
 
 
 #use SSH if source is on remote server
-if [[ "${SOURCE_DIRECTORY_IS_REMOTE}" == true ]]; then
+if [[ "${SOURCE_SSH_FILE_ACCESS}" == true ]]; then
 SOURCE_DIRECTORY_PATH="-e ssh ${SSH_CONN}:${SOURCE_DIRECTORY_PATH}"
 fi
 
