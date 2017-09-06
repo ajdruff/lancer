@@ -4,15 +4,17 @@
 # 
 #
 #
-# Backs up files
+# Backs up database
 #
 #  Usage:
-# ./backup-files.sh live/dev/stage [dry]
+# ./backup-db.sh live/dev/stage [dry]
 #
 #
 # @author <andrew@nomstock.com>
-# @todo change mysql backup script to save in the same format as the the files - to the backups directory,zipped and renamed to include time of backup
+# @todo :Examine scripts and split out getEnvVars to be specific for each script since there are target and sources.
 #################
+ 
+
 
 
 
@@ -30,7 +32,7 @@ source "${DIR%%/}/.bin/lancer.conf.sh";
 source "${DIR%%/}/.bin/functions.sh";
 
 #include backup files functions
-source "${DIR%%/}/.bin/functions.backup-files.sh";
+source "${DIR%%/}/.bin/functions.backup-db.sh";
 
 #check that server environment was passed
 setServerEnvFromArg $1
@@ -39,12 +41,19 @@ setServerEnvFromArg $1
 getEnvVars
 
 
-checkForDryRun "${1}" "${2}"
-checkIfRemoteSource
+
+setSourceDBVars
+setMysqlDumpArgs ${1} ${2}
 makeDestinationDirectory
-setBackupCommands
-doBackup
-compressFiles
+
+
+#create .my.cnf files to 
+createMyCnf
+
+
+#
+backupDB
+compressDB
 showBackupCommand
 showCompressCommand
 showBackupCompleteMessage

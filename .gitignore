@@ -1,6 +1,7 @@
 /adhoc
 /etc/*.conf*
 !/etc/*.conf-sample
+!/etc/*.conf.tpl
 /temp
 /cache
 *.log

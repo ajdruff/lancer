@@ -21,11 +21,11 @@ function setServerEnvFromArg()
 {
    if [ $# -eq 0 ]
   then
-    echo "Missing argument: server environment for key destination (live,dev,or stage)"
+    echo "Missing argument: server environment (live,dev,or stage)"
     exit;
 fi
 if [[ $1 != live ]] && [[ $1 != dev ]] && [[ $1 != stage ]] ; then
-        echo "Invalid argument: server environment for key destination must b (live,dev, or stage)"
+        echo "Invalid argument: server environment must be (live,dev, or stage)"
 else
 
 #capitalize ENV
@@ -61,7 +61,7 @@ SSH_CONN="${SSH_USER}"@"${SSH_HOST}"
 var="$SERVER_ENV"_DIR_PATH
 REMOTE_DIR_PATH="${!var}"
 
-############ BACKUPS ###################################
+##Backup Files
 #SOURCE_DIRECTORY_IS_REMOTE
 var="$SERVER_ENV"_DIRECTORY_IS_REMOTE
 SOURCE_DIRECTORY_IS_REMOTE=$(echo "${!var}" | xargs ); 
@@ -76,7 +76,14 @@ var="$SERVER_ENV"_RSYNC_EXCLUDE_FILE
 RSYNC_EXCLUDE_FILE="${!var}"
 
 
+
+
+
+
+
 }
+
+
 
 
 
@@ -166,6 +173,8 @@ read -p "${1}"
 function exec_remote()
 {
 
+remote_command="${1}";
+
 echo "${remote_command}" | ssh ${SSH_CONN} 'bash -s';
 
 
@@ -216,3 +225,20 @@ echo -e "DEBUG:${1}"
 fi
 
 }
+
+
+spinner()
+{
+    local pid=$!
+    local delay=0.75
+    local spinstr='|/-\'
+    while [ "$(ps a | awk '{print $1}' | grep $pid)" ]; do
+        local temp=${spinstr#?}
+        printf " [%c]  " "$spinstr"
+        local spinstr=$temp${spinstr%"$temp"}
+        sleep $delay
+        printf "\b\b\b\b\b\b"
+    done
+    printf "    \b\b\b\b"
+}
+
