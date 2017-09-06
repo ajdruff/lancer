@@ -243,9 +243,8 @@ function compressDB ()
 compress_option="none";
 if [ "${DB_BACKUP_COMPRESSION}" = "zip" ]; then
 
-compress_command="cd ${LOCAL_BACKUP_DIR_EXTENDED}/${MIRROR_BACKUP_DIRNAME}; zip -r ../${DOMAIN}-${SERVER_ENV}-${ARCHIVE_FILE_ENDING}.zip ./;cd -;" 
+compress_command="cd ${LOCAL_BACKUP_DIR_EXTENDED}/${MIRROR_BACKUP_DIRNAME} /dev/null; zip -r ../${DOMAIN}-${SERVER_ENV}-${ARCHIVE_FILE_ENDING}.zip ./ > /dev/null ;cd -;> /dev/null"  
 
-compress_command_dryrun="cd ${LOCAL_BACKUP_DIR_EXTENDED}/${MIRROR_BACKUP_DIRNAME}; zip -r - ./ | echo ;cd -;" 
 
 
 
@@ -255,9 +254,9 @@ fi
 if [ "${DB_BACKUP_COMPRESSION}" = "tar" ]; then
 #tar is failsafe. in case someone uses an invalid compression type
 
-compress_command="tar -zcvf ${LOCAL_BACKUP_DIR_EXTENDED}/${DOMAIN}-${SERVER_ENV}-${ARCHIVE_FILE_ENDING}.tar.gz -C  ${LOCAL_BACKUP_DIR_EXTENDED}/${MIRROR_BACKUP_DIRNAME} ./" 
+compress_command="tar -zcvf ${LOCAL_BACKUP_DIR_EXTENDED}/${DOMAIN}-${SERVER_ENV}-${ARCHIVE_FILE_ENDING}.tar.gz -C  ${LOCAL_BACKUP_DIR_EXTENDED}/${MIRROR_BACKUP_DIRNAME} ./ > /dev/null" 
 
-compress_command_dryrun="tar -zcvf /dev/null -C  ${LOCAL_BACKUP_DIR_EXTENDED}/${MIRROR_BACKUP_DIRNAME} ./" 
+
 
 fi
 
