@@ -10,6 +10,8 @@
 #
 # @author andrew@nomstock.com
 # @todo: Replace references of DIR_PARENT with LANCER_DIR
+# @todo: make sure all variables with paths are stripped of trailing slash
+
 #################
 
 
@@ -17,15 +19,17 @@
 #this works because calling script is in bin and its including this file.
 LANCER_DIR=$(dirname ${DIR%%/})
 
-
-#read variables in lancer.conf
-lancer_conf="${LANCER_DIR%%/}/etc/lancer.conf"
-source <(grep = ${lancer_conf} | sed 's/ *= */=/g')
-
+#order of inclusion is important. lancer.conf must come after .lancer-conf
+#this allows you to change values of .lancer-conf by adding the variable to lancer-conf and changing it to its new value, avoding over-writing 'factory defaults' and leading to git modifictions.
 
 #read variables in hidden advanced configuration file in .lancer-conf
 lancer_hidden_conf="${LANCER_DIR%%/}/etc/.lancer-conf"
 source <(grep = ${lancer_hidden_conf} | sed 's/ *= */=/g')
+
+
+#read variables in lancer.conf
+lancer_conf="${LANCER_DIR%%/}/etc/lancer.conf"
+source <(grep = ${lancer_conf} | sed 's/ *= */=/g')
 
 
 #strip trailing slash ref: https://stackoverflow.com/a/1848456/3306354

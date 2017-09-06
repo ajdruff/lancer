@@ -100,6 +100,35 @@ and follow the prompts. When you are finished, you will have 2 files, .id_rsa, t
             ssh ex
             ssh -p 2222 joe@example.com
 
+            
+**configuration files**
+
+There are 2 main configuration files.
+
+* *etc/lancer.conf* - This file contains user configurable values specific to your installation.
+
+* *etc/.lancer-conf* - Hidden configuration file that contains default values for pre-defined variables common for all installations and **should never be edited**. If you need to change the value for any of these variables, add the same variable to `etc/lancer.conf` and change its value. See the *Debugging* section for an example using the `LANCER_DEBUG` pre-defined variable. 
+    
+
+**database connections**
+
+Configuration for database connections should only be done using the `etc/lancer-conf` file.
+
+
+Database connections are made using a MySQL option file that is created by the backup script based on your `etc/lancer-conf` values and copied to your local home directory or uploaded to your remote server over a secure SSH connection. 
+
+The file created for this purpose is `etc/.lancer-my.conf` and should never be edited.  
+
+During use,the permissions set on the file are 0600, securing access to all but the user of the script. After each connection, the file is deleted. 
+
+
+
+Database connections are done this way to ensure passwords are never passed through clear text, left in history, or can be seen using the `ps` command, and because MySQL tunnelling cannot always be used since  port forwarding is frequently disabled on some shared hosts.
+
+
+            
+            
+            
 ## Step X - Upload Public Keys
 
 ### setup keys for each environment that you will be remotely conntecting to:
@@ -112,12 +141,54 @@ and follow the prompts. When you are finished, you will have 2 files, .id_rsa, t
     ./setup-keys.sh dev
     ./setup-keys.sh stage
 
-###Step X -     
+### Step X -     
 
 
 
 # Usage
 
+## backup-files.sh
+
+
+    bin/backup-files.sh <env> [<dry>]
+        
+  Backs up files in the DIR_PATH value configured for the specified environment in  `etc/lancer.conf`. By default, backups are located in the `backups` directory within the `lancer` project directory.
+
+  * env = live/dev/stag
+  * dry = will do a simulated backup
+  
+  File backups are done with rsync. A dry file backup will use the --dry-run flag for rsync.
+  
+  
+## backup-db.sh 
+
+    bin/backup-db.sh <env> [<db|all>]
+    
+  * env = live/dev/stag
+  * db = name of the database to backup or `all` which will backup all databases.
+  
+  By default, if no db option is given , lancer will backup the database configured for the specified environment in your `etc/lancer.conf` file.
+  
+  
+ Backs up the database to `backups` folder.
+
+ 
+# Git Repo & Sensitive Data
+ 
+ If you clone or fork the repository, please avoid committing any sensitive information such as passwords to the repo.
+ 
+ To avoid commiting passwords to the repo, lancer uses '-sample' files for most sensitive files and lancer's `.gitignore` file ignores those `.conf` files that do not include `-sample` as a suffix. 
+
+ 
+ 
+ 
+## Debugging
+
+
+If you want to see additional debug output, add the following variable to your `etc/lancer.conf` file: 
+
+    LANCER_DEBUG=true;
+    
 
 
 
