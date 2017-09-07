@@ -32,16 +32,27 @@ source "${DIR%%/}/.bin/lancer.conf.sh";
 source "${DIR%%/}/.bin/functions.sh";
 
 #include backup files functions
-source "${DIR%%/}/.bin/functions.backup-db.sh";
+source "${DIR%%/}/.bin/functions.go.sh";
 
 #check that server environment was passed
-setServerEnvFromArg $1
+setTargetServerEnv $1
 
 #Now that we know environment, get appropriate values
-getEnvVars
+
+setTargetServerVars $TARGET_SERVER_ENV
+
+setSourceServerVars  "DEV"
 
 
 
+
+
+goLive  "${1}" "${2}"
+
+exit;
+
+#rename suffix to target  
+#uploadDB
 
 #show remote prompt
 #check if on live branch
@@ -58,14 +69,12 @@ getEnvVars
 #this can be automated.... . if everything works, you can then drop the live database and do a reimport to the new db.
 
 
-setPublishVars
 
 #create .my.cnf files to 
-createMyCnf
+#createMyCnf
 
-uploadFiles
-uploadDB
 
-showUploadCommands
-showGoLiveCompleteMessage
+#uploadDB
+
+
 

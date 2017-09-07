@@ -39,8 +39,12 @@ STAGING_FILE_ROOT=${STAGING_FILE_ROOT%/}
 CACHE_DIR="${CACHE_DIR%/}"
 
 
-#check that cache directory exists
-mkdir -p $CACHE_DIR
+LIVE_TARGET_PUBLISH_DIR=${LIVE_TARGET_PUBLISH_DIR%/}
+DEV_TARGET_PUBLISH_DIR=${DEV_TARGET_PUBLISH_DIR%/}
 
+
+#check that cache directory exists
+mkdir -p "${CACHE_DIR}"
+mkdir -p "${ARCHIVES_DIR}"
 
 

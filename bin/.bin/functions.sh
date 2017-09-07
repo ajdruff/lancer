@@ -164,8 +164,10 @@ fi
 function show_remote_exec_message()
 {
 
-echo "Connecting to ${SSH_CONN} ..."
-read -p "${1}"
+local message
+message=$(echo -e "${1}")
+
+read -p "${message}"
 
 }
 
@@ -229,6 +231,8 @@ fi
 
 spinner()
 {
+#usage: do_something & spinner
+
     local pid=$!
     local delay=0.75
     local spinstr='|/-\'

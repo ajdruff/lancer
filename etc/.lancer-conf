@@ -26,7 +26,16 @@ DEV_TO_STAGE_CONVERSION_FILE="${DIR%%/}/fix-domain-dev-to-stage.sql";
 LIVE_TO_DEV_CONVERSION_FILE="${DIR%%/}/fix-domain-live-to-dev.sql"; 
 LIVE_TO_STAGE_CONVERSION_FILE="${DIR%%/}/fix-domain-live-to-stage.sql"; 
 
+[archives]
+#local archives directory
+ARCHIVES_DIR=${LANCER_DIR%%/}/archives
 
+#remote archives directory name
+ARCHIVES_DIR_REMOTE=".lancer-archives"
+
+#lancer suffix
+#text string used for rsync target directories
+LANCER_SUFFIX="lancer"
 
 [backups]
 #the text you want to be added to each backup file.
@@ -34,7 +43,7 @@ ARCHIVE_FILE_ENDING=$(date '+%Y-%m-%d-%H-%M')
 #absolute file path to where we save remote backups.
 LOCAL_BACKUP_DIR="${LANCER_DIR%%/}/backups"; 
 FILES_BACKUP_DIRNAME="files";
-DATABASE_BACKUP_DIRNAME="database";
+DB_BACKUP_DIRNAME="database";
 MIRROR_BACKUP_DIRNAME="latest";
 
 
