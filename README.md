@@ -81,13 +81,49 @@ For more information on configuration files, see the **Lancer Configuration File
 
     bin/backup-db.sh <env> [<db|all>]
     
-  * env = live/dev/stag
+  * env = live/dev/stage
   * db = name of the database to backup or `all` which will backup all databases.
   
   By default, if no db option is given , lancer will backup the database configured for the specified environment in your `etc/lancer.conf` file.
   
   
  Backs up the database to `backups` folder.
+
+## go.sh
+ 
+Stages development files and database  to a target server and places them online.
+
+    go <env> [dry|!]     
+
+  * env = live/dev/stag
+  * dry - do a dry run (simulates the file uploads) 
+  * ! - places the uploaded files online
+  
+  
+Examples:
+
+**Upload the files in `DEV_SOURCE_PUBLISH_DIR`  to a staged directory**
+
+    ./go.sh live
+
+
+The staged directory is located on the LIVE server in a directory named after the  `LIVE_TARGET_PUBLISH_DIR` directory but with a `-lancer` text string appended to the name.
+
+So if your `LIVE_TARGET_PUBLISH_DIR` configuration value was `/home/user/public_html/wp-content` , you would find your uploaded files in  `/home/user/public_html/wp-content-lancer`
+
+**Replace**
+  
+      ./go.sh live !
+
+When you execute this command, you are removing and replacing your live files.
+
+This command assumes that you recently executed `./go.sh live` so that there are staged files are already uploaded into the `-lancer` directory. 
+
+It removes any existing files in the target directory and archives them to a location on the target server (`~/.lancer-archives`), and then replaces the target directory with the contents of the previously uploaded files now in the  `-lancer` directory. 
+
+>`~/.lancer-acrhives` holds only the most recent archive. If you publish twice in a row, your second publish will overwrite the archive.
+
+>You can find additional archives in your local `lancer/archives` directory. Lancer. See this Readme's *Backups and Archives* section for more information.
 
  
 # Lancer Configuration Files
@@ -115,8 +151,7 @@ During use,the permissions set on the file are 0600, securing access to all but 
 
 Database connections are done this way to ensure passwords are never passed through clear text, left in history, or can be seen using the `ps` command, and because MySQL tunnelling cannot always be used since  port forwarding is frequently disabled on some shared hosts.
 
-
-            
+           
             
  
 # Git Repo & Sensitive Data
@@ -136,6 +171,24 @@ Database connections are done this way to ensure passwords are never passed thro
        !/etc/*.conf.tpl
 
 
+# Backups and Archives
+
+There is always a risk of overwriting your live server's data when you use an application to automate deployment. Lancer takes several measures to minimize this risk, but it is recommended that you maintain backups of your production and dev servers, independent of the backups and archives lancer provides.
+
+Lancer does the following to minimize data overwrite:
+
+* Backs up the target server prior to file uploads.
+* Makes a historical archive of the target publishing directory to local before upload
+* Makes `last used` archive of the target publishing directory before file replacement
+* Provides `backup-files.sh` and `backup-db.sh` scripts for your use to facilitate backups.
+
+Archives differ from backups in that archives are only of the publishing directory (not the full root) and pertain to target servers (not development server content)
+
+**Backup and Archive Locations**
+
+* Backups are located in `lancer/backups`
+* Historical archives are located in `lancer/archives`
+* Target server 'last used' archives are located in your target server's home user directory `~.lancer-archives` . This holds only the most recent contents of the publishing directory prior to the most recent publication.
 
 
  
@@ -253,6 +306,15 @@ lancer is destined to be a nodejs app once its been refactored as a messy set of
 
 ## ChangeLog
 
+
+**9-7-2017**
+
+* added go.sh
+* you can now `go live` and `go live !`
+* renamed some configuration variables 
+* rewrote the script patterns to 
+use a TARGET_SERVER and SOURCE_SERVER environment vars to be more explicit
+* updated README
 
 **9-6-2017**
 
