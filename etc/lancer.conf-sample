@@ -15,6 +15,9 @@ DOMAIN=
 #absolute path to root directory; /home/username
 LIVE_FILE_ROOT=
 
+#absolute path target for 'publish' script. /home/user/public_html/wp-content
+LIVE_TARGET_PUBLISH_DIR=/home4/ab4210/public_html/wp-content4
+
 #database name and credentials
 LIVE_DB_NAME=
 LIVE_DB_USER=
@@ -35,6 +38,8 @@ LIVE_SSH_DB_ACCESS=
 #absolute path to root directory; /home/username
 DEV_FILE_ROOT=
 
+#absolute path source for 'publish' script. /home/user/public_html/wp-content
+DEV_SOURCE_PUBLISH_DIR="/home/adruff/www/clients/wwmattress/wwm/_www/html/wp-content"
 
 #database name and credentials
 DEV_DB_NAME=
@@ -62,6 +67,9 @@ STAGE_ENABLED=false;
 
 #absolute path to root directory; /home/username/stage
 STAGE_FILE_ROOT=
+
+#absolute path target for 'publish' script. /home/user/public_html/wp-content
+STAGE_PUBLISH_TARGET_DIR=
 
 #database name and credentials
 STAGE_DB_NAME=
