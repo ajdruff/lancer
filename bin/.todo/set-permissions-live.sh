@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 
 #################
-# set-permissions-stage.sh
+# set-permissions-live.sh
 #
 #
 #################
@@ -26,12 +26,12 @@ source "${DIR%%/}/config-bash.conf";
 ########################
 
 
-command="cat ${DIR%%/}/config-bash.conf ${DIR%%/}/set-permissions-stage.inc.sh |ssh ${SSH_CONNECTION} bash -s"
+command="cat ${DIR%%/}/config-bash.conf ${DIR%%/}/set-permissions-live.inc.sh |ssh ${SSH_CONN} bash -s"
 
 eval $command;
 
 
-echo '##### Completed Setting Stage Permissions ######';
+echo '##### Completed Setting live Permissions ######';
 
 
 #############################

@@ -4,100 +4,288 @@
 A WordPress Toolset that helps to manage local dev and live environments.
 
 
-#Who needs it
+# Who needs it
 
 If you develop on WordPress and/or do frequent WordPress setups, and migrations (from one domain or host to another).
 
-#Why you need it
+# Why you need it
 
 * Easily upload keys with one command
 * Easily backup, publish without relying on plugins.
 * packages all configuration on one place 
 
-#Tutorials
+# Tutorials
 
 * see [Lancer for WordPress Tutorials](#)
 
 
-#Requirements
+# Requirements
 
 * bash
-* git 
-
-For Windows users, cygwin is not supported. Instead, install the excellent Git for Windows, and run it from within the Git Bash. 
-
-For more on how you can setup a nice Windows environment, see [Setup an Awesome MingGW Linux Development Environment in Windows](#)
-
-
-#Configure
-
-Configuration files consist of:
-
-* `lancer.conf`  
-    * contains general configuration options.
-    * you must first create it on installation from lancer.conf-sample
-* `.lancer-conf`
-    * contains advanced configuration options
-* `~/.ssh/config` (optional)
-    * if your ssh connection requires a different port or other command line switches, configure it using a ssh_config file located within your local .ssh directory. see open_ssh documentation for more details or README for basic usage.
-
-#Usage
-
-
-##Step 1 - Configure
-
-1. create lancer.conf from lancer.conf-sample 
-2. edit lancer.conf for your installation
-3. For each remote server, if ssh connection is on a alternate port or requires custom switches, create or edit `.ssh/config` .
-4. If you use a passphrase on your keys, you'll need to run `ssh-agent` or [pageant](https://www.ssh.com/ssh/putty/putty-manuals/0.68/Chapter9.html)
-
-
-sample file:
-
-
-    Host ex example.com
-        User joe
-        HostName example.com
-        Port 2222
-        PreferredAuthentications publickey,password
-        IdentityFile /path/to/local/id_rsa
-
->IdentifyFile = private key file. tells ssh where to find the private key. if it has a passphrase, you'll be prompted for it each time you login unless you are running ssh-agent
->**for more information, see [OpenSSH/Client Configuration Files](https://en.wikibooks.org/wiki/OpenSSH/Client_Configuration_Files)
-
-
-For the given ssh config file, all the following logins will work:
-
-        ssh joe@example.com
-        ssh ex
-        ssh -p 2222 joe@example.com
+* git
+* openssh
+* rsync
+* mysql client and mysql dump
 
 
             
-            
-##Step X - Upload Public Keys
+# Installation
 
-###setup keys for each environment that you will be remotely conntecting to:
+
+## Step 1 - Download
+
+
+
+## Step 2 - Configure
+
+Create `etc/lancer.conf` from `etc/lancer.conf-sample`  and edit it with values for your installation.
+
+For detailed SSH setup, see the **SSH Connections** section later in this README.
+
+For more information on configuration files, see the **Lancer Configuration Files** section.
+
+
+            
+## Step 3 - Upload Public Keys
+
+### setup keys for each environment that you will be remotely conntecting to:
 
     ./setup-keys.sh live
 
-###option if your dev and stage servers are remote:
+###(optional) if your dev and stage servers are remote:
 
 
     ./setup-keys.sh dev
     ./setup-keys.sh stage
 
-###Step X -     
+  
 
 
-#Contributors
+
+# Usage
+
+## backup-files.sh
+
+
+    bin/backup-files.sh <env> [<dry>]
+        
+  Backs up files in the DIR_PATH value configured for the specified environment in  `etc/lancer.conf`. By default, backups are located in the `backups` directory within the `lancer` project directory.
+
+  * env = live/dev/stag
+  * dry = will do a simulated backup
+  
+  File backups are done with rsync. A dry file backup will use the --dry-run flag for rsync.
+  
+  
+## backup-db.sh 
+
+    bin/backup-db.sh <env> [<db|all>]
+    
+  * env = live/dev/stage
+  * db = name of the database to backup or `all` which will backup all databases.
+  
+  By default, if no db option is given , lancer will backup the database configured for the specified environment in your `etc/lancer.conf` file.
+  
+  
+ Backs up the database to `backups` folder.
+
+## go.sh
+ 
+Stages development files and database  to a target server and places them online.
+
+    go <env> [dry|!]     
+
+  * env = live/dev/stag
+  * dry - do a dry run (simulates the file uploads) 
+  * ! - places the uploaded files online
+  
+  
+Examples:
+
+**Upload the files in `DEV_SOURCE_PUBLISH_DIR`  to a staged directory**
+
+    ./go.sh live
+
+
+The staged directory is located on the LIVE server in a directory named after the  `LIVE_TARGET_PUBLISH_DIR` directory but with a `-lancer` text string appended to the name.
+
+So if your `LIVE_TARGET_PUBLISH_DIR` configuration value was `/home/user/public_html/wp-content` , you would find your uploaded files in  `/home/user/public_html/wp-content-lancer`
+
+**Replace**
+  
+      ./go.sh live !
+
+When you execute this command, you are removing and replacing your live files.
+
+This command assumes that you recently executed `./go.sh live` so that there are staged files are already uploaded into the `-lancer` directory. 
+
+It removes any existing files in the target directory and archives them to a location on the target server (`~/.lancer-archives`), and then replaces the target directory with the contents of the previously uploaded files now in the  `-lancer` directory. 
+
+>`~/.lancer-acrhives` holds only the most recent archive. If you publish twice in a row, your second publish will overwrite the archive.
+
+>You can find additional archives in your local `lancer/archives` directory. Lancer. See this Readme's *Backups and Archives* section for more information.
+
+ 
+# Lancer Configuration Files
+
+
+* *etc/lancer.conf* - This file contains user configurable values specific to your installation. Create from its sample file.
+
+* *etc/.lancer-conf* - Hidden configuration file that contains default values for pre-defined variables common for all installations and **should never be edited**. If you need to change the value for any of these variables, add the same variable to `etc/lancer.conf` and change its value. See the *Debugging* section for an example using the `LANCER_DEBUG` pre-defined variable. 
+    
+* *etc/rsync-exclude-LIVE/DEV/STAGE.conf* - Create from their sample file. Used to exclude any rsync patterns (files or directories) you don't want to backup when running the `backup-files` script. See the **Include/Exclude Pattern Rules** section at the [rsync man page](https://linux.die.net/man/1/rsync) for more information.
+
+
+**database connections**
+
+Configuration for database connections should only be done using the `etc/lancer-conf` file.
+
+
+Database connections are made using a MySQL option file that is created by the backup script based on your `etc/lancer-conf` values and copied to your local home directory or uploaded to your remote server over a secure SSH connection. 
+
+The file created for this purpose is `etc/.lancer-my.conf` and should never be edited.  
+
+During use,the permissions set on the file are 0600, securing access to all but the user of the script. After each connection, the file is deleted. 
+
+
+
+Database connections are done this way to ensure passwords are never passed through clear text, left in history, or can be seen using the `ps` command, and because MySQL tunnelling cannot always be used since  port forwarding is frequently disabled on some shared hosts.
+
+           
+            
+ 
+# Git Repo & Sensitive Data
+ 
+ If you clone or fork the **lancer** repository, please avoid committing any sensitive information such as passwords to the repo.
+ 
+ 
+ To avoid commiting passwords to the repo, **lancer's** repository contains configuration files ending in '-sample'. Lancer's `.gitignore` file ignores those `.conf` files that do not include `-sample` as a suffix. 
+
+ 
+ If you download this repo without cloning it and don't have the original `.gitignore` rules, add the following to your `.gitignore` file . Note that entries are cascaded, so it matters the order you place the entries.
+ 
+ 
+
+       /etc/*.conf*
+       !/etc/*.conf-sample
+       !/etc/*.conf.tpl
+
+
+# Backups and Archives
+
+There is always a risk of overwriting your live server's data when you use an application to automate deployment. Lancer takes several measures to minimize this risk, but it is recommended that you maintain backups of your production and dev servers, independent of the backups and archives lancer provides.
+
+Lancer does the following to minimize data overwrite:
+
+* Backs up the target server prior to file uploads.
+* Makes a historical archive of the target publishing directory to local before upload
+* Makes `last used` archive of the target publishing directory before file replacement
+* Provides `backup-files.sh` and `backup-db.sh` scripts for your use to facilitate backups.
+
+Archives differ from backups in that archives are only of the publishing directory (not the full root) and pertain to target servers (not development server content)
+
+**Backup and Archive Locations**
+
+* Backups are located in `lancer/backups`
+* Historical archives are located in `lancer/archives`
+* Target server 'last used' archives are located in your target server's home user directory `~.lancer-archives` . This holds only the most recent contents of the publishing directory prior to the most recent publication.
+
+
+ 
+# SSH Connections
+
+**Lancer** makes extensive use of SSH for access to remote servers. To properly work with your configuration, keys must be saved in the format required by your remote server's `~/.ssh/authorized_keys` file.
+
+**Lancer** leverages the `ssh_config` style configuration for SSH clients, and does not require you to add duplicate SSH port, username or other information to `lancer-config`. For more information see the *SSH Configuration* section below.
+
+
+## SSH Keys
+To generate your Public/Private key pair:
+
+    ssh-keygen
+    
+and follow the prompts. When you are finished, you will have 2 files, .id_rsa, the private key and id_rsa.pub, the public key.     
+
+>To avoid overwriting any existing private key, create a project directory at ~/.ssh/project-name and create the keys there.
+
+
+**SSH Keys for Windows Users**
+
+[PuttyGen](https://www.ssh.com/ssh/putty/windows/puttygen) can be used to generate keys but it is not recommended since by default the public key it saves (even if converted to openssh) is not compatible with **lancer**. 
+
+**To create a compatible public key using PuTTYGen:** 
+
+ 
+1. Click `Generate`
+2. Click `Save private key` and save as `id_rsa.ppk`. This will save a file for use by PuTTY only. It contains both public and private keys.
+3. Click `Conversions / Export OpenSSH key` and save as `id_rsa` with no file extension. This saves the private key in the standard OpenSSH format.
+4. **Do NOT  use the `save public key' feature of PuTTYGen.** 
+    Instead do this :
+
+    * Copy the contents within the text box labeled `Public key for pasting into OpenSSH authorized_keys file`.
+    * Create a file in notepad and name it `id_rsa.pub`. Paste the contents that you just copied into the file and save it. 
+
+>PuTTYGen's `Save Public Key` button should not be used to save public keys. The reason is that it will save the key with dashed lines and without the `ssh-rsa` prefix that openssh  looks for.
+
+
+
+## SSH Configuration
+
+If your remote server's ssh connection is on an alternate port or requires custom switches, create or edit `~/.ssh/config` on your **client** machine : 
+
+
+
+            Host ex example.com
+                 User joe
+                 HostName example.com
+                 Port 2222
+                 PreferredAuthentications publickey,password
+                 IdentityFile /path/to/local/id_rsa
+                 AddKeysToAgent yes
+
+
+
+>*IdentifyFile* = Tells ssh where to find the private key. Tf your private key has a passphrase, you'll be prompted for it each time you login unless you are running ssh-agent
+
+>*AddKeysToAgent* : Tells ssh to automatically add the private key to ssh-agent once you've successfully added your passphrase.    
+
+>**for more information, see [OpenSSH/Client Configuration Files](https://en.wikibooks.org/wiki/OpenSSH/Client_Configuration_Files)**
+
+
+
+
+For the above ssh config, you can login to example.com using any of the following commands:
+
+            ssh joe@example.com
+            ssh ex
+            ssh -p 2222 joe@example.com
+
+ 
+# Debugging
+
+
+If you want to see additional debug output, add the following variable to your `etc/lancer.conf` file: 
+
+    LANCER_DEBUG=true;
+    
+
+## Windows
+
+Lancer *almost* works within a [Cygwin](https://www.cygwin.com/)/[MinGW](http://www.mingw.org/)/[MSYS](http://www.mingw.org/wiki/MSYS) environment. However. Because `rsync` reads any path with a colon inside of it as a remote server, it refuses to work correctly when using Windows absolute paths.
+
+For this reason, it is strongly recommended that you a VirtualBox or other Virtual environment that runs your favorite Linux distribution.
+
+If you really want to try running it on Windows anyway without a VM, take a look at the [Windows Setup Readme]()  (included in the lancer download).
+
+
+# Contributors
 
 Andrew Druffner `<andrew@nomstock.com>`
     
-#Dev Notes
+# Dev Notes
 
 
-##History
+## History
 
 lancer is a rewrite of [slide rule](https://github.com/ajdruff/slide-rule)
 
@@ -109,18 +297,35 @@ The intent of the rewrite is to:
 * increase code maintainability
 
 
-##RoadMap
+## RoadMap
 
 lancer is destined to be a nodejs app once its been refactored as a messy set of bash scripts.
 
-##todo
-
-* create branch lancerjs
-* create console wizard that will prompt user for configuration. do this as a lancerjs app first, don't bother writing it in bash.
-* change all sql scripts to bash scripts using this as a guide: https://stackoverflow.com/a/25109187/3306354 . take into  consideration moving sql variables to lancer.conf, so should be no need for lancer.sql.conf
 
 
-##ChangeLog
+
+## ChangeLog
+
+
+**9-7-2017**
+
+* added go.sh
+* you can now `go live` and `go live !`
+* renamed some configuration variables 
+* rewrote the script patterns to 
+use a TARGET_SERVER and SOURCE_SERVER environment vars to be more explicit
+* updated README
+
+**9-6-2017**
+
+* rewrote backup scripts
+* added backup-files.sh
+* added backup-db.sh
+* refactored configuration file inclusion so can override .lancer-conf
+* added LANCER_DEBUG
+* updated README
+* cleaned up bin directory and moved all deprecated/todo scripts to hidden directories that are excluded from downloads.
+
 
 **8/29/2017**
 
@@ -130,3 +335,7 @@ lancer is destined to be a nodejs app once its been refactored as a messy set of
 * added support for dev,stage environments for setup-keys
 * refactored setup-keys to support multiple environments using SERVER_ENV argument. Use as template for all scripts.
 * leverage use of ssh_config instead of local configuration of SSH connection.
+
+
+
+

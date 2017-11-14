@@ -44,14 +44,17 @@ dry_run_option=" --dry-run ";
 fi
 
 
+
 #######################
 #
-# Rsync to Stage
+# Rsync to live
 #
 ########################
 
-
-command="rsync  -azvH   ${dry_run_option} ${LOCAL_REPO_PATH}/_stage/*  -e ssh ${SSH_CONNECTION}:${STAGE_DIR_PATH}";
+command="rsync  -azvH   ${dry_run_option} ${LOCAL_REPO_PATH}/_live/*  -e ssh ${SSH_CONN}:${LIVE_DIR_PATH}";
 #echo $command;
 eval $command;
 
+#run skip worktree. this ensures that any edits of password files wont be committed.
+command="ssh ${SSH_CONN} sh ${LIVE_DIR_PATH}/config/git-skip-worktree.sh";
+eval $command;

@@ -43,7 +43,7 @@ fi
 ########################
 
 
-command="rsync  -azvH --delete  ${dry_run_option} ${LOCAL_REPO_PATH%%/}/${HTML_DIRNAME}  -e ssh ${SSH_CONNECTION}:${STAGE_DIR_PATH}";
+command="rsync  -azvH --delete  ${dry_run_option} ${LOCAL_REPO_PATH%%/}/${HTML_DIRNAME}  -e ssh ${SSH_CONN}:${STAGE_DIR_PATH}";
 
 eval $command;
 
@@ -68,7 +68,7 @@ fi
 
 
 #rsync local config
-command="rsync  -azvH   ${dry_run_option} ${LOCAL_REPO_PATH}/_stage/*  -e ssh ${SSH_CONNECTION}:${STAGE_DIR_PATH}";
+command="rsync  -azvH   ${dry_run_option} ${LOCAL_REPO_PATH}/_stage/*  -e ssh ${SSH_CONN}:${STAGE_DIR_PATH}";
 #echo $command;
 eval $command;
 

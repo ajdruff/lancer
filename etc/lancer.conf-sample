@@ -8,19 +8,57 @@
 # Absolute file paths: do not include tilde ~ or  trailing slash
 #
 [server]
-#production domain example.com
+#production domain; example.com
 DOMAIN=
 
 [live]
-
 #absolute path to root directory; /home/username
-LIVE_DIR_PATH=
+LIVE_FILE_ROOT=
 
-#database name; username_wordpress
+#absolute path target for 'publish' script. /home/user/public_html/wp-content
+LIVE_TARGET_PUBLISH_DIR=/home4/ab4210/public_html/wp-content4
+
+#database name and credentials
 LIVE_DB_NAME=
+LIVE_DB_USER=
+LIVE_DB_PASSWORD=
+LIVE_DB_PORT=3306
+LIVE_DB_HOST=127.0.0.1
+
+
+
+#whether web server file backup requires ssh connection; true
+LIVE_SSH_FILE_ACCESS
+
 
 #whether database server requires ssh connection; true
-LIVE_DATABASE_IS_REMOTE=
+LIVE_SSH_DB_ACCESS=
+
+[dev]
+#absolute path to root directory; /home/username
+DEV_FILE_ROOT=
+
+#absolute path source for 'publish' script. /home/user/public_html/wp-content
+DEV_SOURCE_PUBLISH_DIR="/home/adruff/www/clients/wwmattress/wwm/_www/html/wp-content"
+
+#database name and credentials
+DEV_DB_NAME=
+DEV_DB_USER=
+DEV_DB_PASSWORD=
+DEV_DB_PORT=3306
+DEV_DB_HOST=localhost
+
+
+#whether database server requires ssh connection; true
+DEV_SSH_FILE_ACCESS=false
+
+
+#database name; username_wordpress
+DEV_DB_NAME=
+
+
+#whether database server requires ssh connection; true
+DEV_SSH_DB_ACCESS=
 
 
 [stage]
@@ -28,25 +66,27 @@ LIVE_DATABASE_IS_REMOTE=
 STAGE_ENABLED=false;
 
 #absolute path to root directory; /home/username/stage
-STAGE_DIR_PATH=
+STAGE_FILE_ROOT=
 
-#database name; username_wordpress
+#absolute path target for 'publish' script. /home/user/public_html/wp-content
+STAGE_PUBLISH_TARGET_DIR=
+
+#database name and credentials
 STAGE_DB_NAME=
+STAGE_DB_USER=
+STAGE_DB_PASSWORD=
+STAGE_DB_PORT=3306
+STAGE_DB_HOST=127.0.0.1
+
+
+#whether web server requires ssh connection; true
+STAGE_SSH_FILE_ACCESS=true
+
+
 
 
 #whether database server requires ssh connection; true
-STAGE_DATABASE_IS_REMOTE=
-
-
-
-[dev]
-
-#database name; username_wordpress
-DEV_DB_NAME=
-
-
-#whether database server requires ssh connection; true
-DEV_DATABASE_IS_REMOTE=
+STAGE_SSH_DB_ACCESS=
 
 
 [ssh]
@@ -74,6 +114,18 @@ STAGE_SSH_HOST=
 LIVE_LOCAL_PUBLIC_KEY_PATH=
 DEV_LOCAL_PUBLIC_KEY_PATH=
 STAGE_LOCAL_PUBLIC_KEY_PATH=
+
+[backups]
+#compression format for file backups ; tar/zip/none
+FILE_BACKUP_COMPRESSION=tar; 
+DB_BACKUP_COMPRESSION=tar; 
+
+LIVE_RSYNC_EXCLUDE_FILE="rsync-exclude-LIVE.conf-sample"
+DEV_RSYNC_EXCLUDE_FILE="rsync-exclude-DEV.conf-sample"
+STAGE_RSYNC_EXCLUDE_FILE="rsync-exclude-STAGE.conf-sample"
+
+
+
 
 
 

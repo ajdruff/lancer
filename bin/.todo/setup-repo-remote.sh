@@ -28,13 +28,13 @@ DIR_PARENT=$(dirname $DIR)
 source "${DIR%%/}/config-bash.conf";
 
 # use cat + no echo 
-# cat ${DIR%%/}/commands.inc.sh | ssh ${SSH_CONNECTION} 'bash -s';
+# cat ${DIR%%/}/commands.inc.sh | ssh ${SSH_CONN} 'bash -s';
 # git init;
 #or
 # use source + echo . this allows you to source in local scripts  
-# cat ${DIR%%/}/commands.inc.sh | ssh ${SSH_CONNECTION} 'bash -s';
+# cat ${DIR%%/}/commands.inc.sh | ssh ${SSH_CONN} 'bash -s';
 # echo 'git init';
-source ${DIR%%/}/setup-repo-remote.inc.sh | ssh ${SSH_CONNECTION} 'bash -s';
+source ${DIR%%/}/setup-repo-remote.inc.sh | ssh ${SSH_CONN} 'bash -s';
 
 echo 'Creating New Repo on remote server and uploading post-receive script';
 
