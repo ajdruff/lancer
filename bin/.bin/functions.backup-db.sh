@@ -12,6 +12,12 @@
 # @author andrew@nomstock.com
 # @todo db1.0 :create query script
 # @todo db1.1:revise file backup script to follow same function pattern and function names 
+# @todo db1.2:bug: latest directory retains old sql downloads. need to delete contents before backup or will wind up accumulating old backups in zip
+# @todo db1.3:bug: names of backup zips do not include name of database
+# @todo db1.4:bug: the files zip and backup zips are indistinguishable - add 'files' and 'db' to the zip naming scheme
+
+
+
 #################
 
 
@@ -170,14 +176,33 @@ function backupDBServerLocal ()
 #copy the my.cnf file to home directory. 
 #we do this because virtualbox shared permissions can't be changed and we assume
 #that lancer project folder is being shared.
-cp "${LANCER_DIR}"/etc/"${MYSQL_DEFAULTS_FILE}" ~/"${MYSQL_DEFAULTS_FILE}"
+cp "${LANCER_DIR}"/etc/"${MYSQL_DEFAULTS_FILE}" "${HOME}"/"${MYSQL_DEFAULTS_FILE}"
 
 #change permissions for security
-chmod 0600 ~/${MYSQL_DEFAULTS_FILE} > /dev/null;
+chmod 0600 "${HOME}"/"${MYSQL_DEFAULTS_FILE}" > /dev/null;
 
 
-mysqldump --defaults-file="~/${MYSQL_DEFAULTS_FILE}" -h "${SOURCE_DB_HOST}" -P "${SOURCE_DB_PORT}" "${MYSQLDUMP_DB}">"${LOCAL_BACKUP_DIR_EXTENDED}"/"${MIRROR_BACKUP_DIRNAME}"/"${DOMAIN}-${SERVER_ENV}-${SOURCE_DB_NAME}.sql"
 
+mysqldump_arguments=""\
+" -v"\
+" -h \"${SOURCE_DB_HOST}\""\
+" -P \"${SOURCE_DB_PORT}\""\
+" \"${MYSQLDUMP_DB}\" 1>\"${LOCAL_BACKUP_DIR_EXTENDED}\"/\"${MIRROR_BACKUP_DIRNAME}\"/\"${DOMAIN}-${SERVER_ENV}-${SOURCE_DB_NAME}.sql\""\
+"";
+#defaults-file must be first arg passed or it will tie error of unrecognized option/variable
+#-v #gives updates on which rows and tables are being saved
+
+
+
+
+
+backup_command="mysqldump --defaults-file=\"$HOME/${MYSQL_DEFAULTS_FILE}\" ${mysqldump_arguments}";
+
+
+
+#echo "${backup_command}";
+
+eval "${backup_command}";
 
 }
 
@@ -192,23 +217,48 @@ function backupDBServerRemote ()
 show_remote_exec_message "Press [Enter] to start backing up the ${SERVER_ENV} MySQL server";
 
 
-#upload the mycnf file, output only error
-scp ${LANCER_DIR}/etc/${MYSQL_DEFAULTS_FILE} ${SSH_CONN}:~/${MYSQL_DEFAULTS_FILE} 1>/dev/null
 
 
+
+
+mysqldump_arguments=""\
+" -v"\
+" -h \"${SOURCE_DB_HOST}\""\
+" -P \"${SOURCE_DB_PORT}\""\
+" \"${MYSQLDUMP_DB}\""\
+"";
+#defaults-file must be first arg passed or it will tie error of unrecognized option/variable
+#-v #gives updates on which rows and tables are being saved
+
+
+
+
+
+#mysqldump --defaults-file="~/.lancer-my.conf"  -v -h "127.0.0.1" -P "3306" "ab4210_wrdp";
+mysqldump_command="mysqldump --defaults-file=\"~/${MYSQL_DEFAULTS_FILE}\" ${mysqldump_arguments}";
+
+#backup command
 backup_command="
 chmod 0600 ~/${MYSQL_DEFAULTS_FILE} > /dev/null;
+${mysqldump_command};
 
-mysqldump --defaults-file=~/${MYSQL_DEFAULTS_FILE} -h ${SOURCE_DB_HOST} -P ${SOURCE_DB_PORT}  ${MYSQLDUMP_DB};
 rm ~/${MYSQL_DEFAULTS_FILE} > /dev/null;
 
 "
+     
+echo "Connecting to ${SSH_CONN}..."
 
+#upload the mycnf file, output only error
+scp "${LANCER_DIR}"/etc/"${MYSQL_DEFAULTS_FILE}" "${SSH_CONN}":'$HOME'/"${MYSQL_DEFAULTS_FILE}" 1>/dev/null
 
-#backup
-ssh "${SSH_CONN}" "${backup_command}"> "${LOCAL_BACKUP_DIR_EXTENDED}"/"${MIRROR_BACKUP_DIRNAME}"/"${DOMAIN}"-"${SERVER_ENV}"-"${SOURCE_DB_NAME}".sql;
+echo 'retrieving database records..';
 
+#do the backup
+#  1>"/home/adruff/www/clients/wwmattress/lancer/backups/LIVE/database"/"latest"/"worldwidemattressoutlet.com"-"LIVE"-"ab4210_wrdp".sql;
+ssh "${SSH_CONN}" "${backup_command}" 1>"${LOCAL_BACKUP_DIR_EXTENDED}"/"${MIRROR_BACKUP_DIRNAME}"/"${DOMAIN}"-"${SERVER_ENV}"-"${SOURCE_DB_NAME}".sql;
 
+#for debug messaging:
+backup_command="${backup_command} ""1>\"${LOCAL_BACKUP_DIR_EXTENDED}\"/\"${MIRROR_BACKUP_DIRNAME}\"/\"${DOMAIN}\"-\"${SERVER_ENV}\"-\"${SOURCE_DB_NAME}\".sql;"
 
 
 
